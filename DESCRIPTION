@@ -26,6 +26,7 @@ Imports:
     Amelia,
     miceRanger,
     labelled,
-    Hmisc
+    Hmisc,
+    stats
 RoxygenNote: 7.2.3
 URL: http://naokiegami.com/spsRdata/

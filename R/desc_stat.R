@@ -4,6 +4,7 @@
 #' @import dplyr
 #' @importFrom tidyr pivot_wider
 #' @importFrom Hmisc rcorr
+#' @importFrom stats quantile na.omit
 #' @return \code{desc_stat} returns a list containing the following elements:
 #'  \itemize{
 #'    \item \code{desc}: Data frame containing descriptive statistics including mean, standard deviation, minimum, maximum, 10, 25, 50, 75, and 90th percentiles for all variables.

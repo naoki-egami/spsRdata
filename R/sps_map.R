@@ -5,7 +5,6 @@
 #' @param countryvar Name of the country variable in \code{data}.
 #' @param countrysps A character vector including country names selected from SPS. Values must come from the variable selected in \code{countryvar}.
 #' @import maps
-#' @import wbstats
 #' @import dplyr
 #' @import ggplot2
 #' @importFrom countrycode countrycode

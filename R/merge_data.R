@@ -7,7 +7,7 @@
 #' @param iso Whether or not the \code{countryvar} is an ISO3 code. If TRUE, the \code{newdata} is merged only using the iso3 code. If FALSE, the \code{newdata} is merged using exact match, followed by a probabilistic match using \code{fastLink} Default is FALSE.
 #' @import fastLink
 #' @import dplyr
-#' @import wbstat
+#' @import wbstats
 #' @return A dataframe with new variables merged.
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
