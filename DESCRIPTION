@@ -10,3 +10,22 @@ Description: R package sps implements the SPS algorithm for site selection and t
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
+Depends:
+    R (>= 3.5.0)
+Imports:
+    tidyr,
+    dplyr,
+    vdemdata,
+    wbstats,
+    fastLink,
+    jsonlite,
+    httr,
+    maps,
+    countrycode,
+    ggplot2,
+    Amelia,
+    miceRanger,
+    labelled,
+    Hmisc
+RoxygenNote: 7.2.3
+URL: http://naokiegami.com/spsRdata/
