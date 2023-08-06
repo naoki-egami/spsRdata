@@ -7,9 +7,6 @@
 #' @import dplyr
 #' @importFrom labelled var_label
 #' @return A dataframe with new variables merged on
-#' @examples
-#' data(sps_data)
-#' new <- add_var(vars = "SM.POP.TOTL.ZS")
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 

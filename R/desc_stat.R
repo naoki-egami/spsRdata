@@ -11,9 +11,6 @@
 #'    \item \code{miss}: Data frame with total number of missing observations (i.e., countries) for each year.
 #'    \item \code{corr}: Correlation matrix of all variables.
 #'  }
-#' @example
-#' data(sps_data)
-#' desc_stat(data = sps_data)
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 
