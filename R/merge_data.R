@@ -4,8 +4,6 @@
 #' @param yearvar Year column name in \code{newdata}.
 #' @param countryvar Country column name in \code{newdata}.
 #' @param iso Whether or not the \code{countryvar} is an ISO3 code. If TRUE, the \code{newdata} is merged only using the iso3 code. If FALSE, the \code{newdata} is merged using exact match, followed by a probabilistic match using \code{fastLink} Default is FALSE.
-#' @param fuzzy_match Type of fuzzy match to be conducted. Choose from "fastLink" or "fuzzyjoin" (default).
-#' @import fastLink
 #' @import fuzzyjoin
 #' @importFrom dplyr group_by_at slice_min
 #' @return A dataframe with new variables merged.
@@ -38,36 +36,16 @@ merge_data <- function(basedata, newdata = NULL, yearvar = NULL, countryvar = NU
     names(base_unique) <- c('iso3', 'cmatch')
     newdata$cmatch <- newdata[[countryvar]]
 
-    if (fuzzy_match == 'fastLink'){
-      fLink <- fastLink(dfA = base_unique,
-                        dfB = newdata,
-                        varnames         = c('cmatch'),
-                        stringdist.match = c('cmatch'),
-                        partial.match    = c('cmatch'))
+    fuzzy <- stringdist_inner_join(base_unique, newdata,
+                                   by = "cmatch",
+                                   distance_col = "distance",
+                                   max_dist = 20) %>%
+      dplyr::group_by_at(c('cmatch.y', yearvar)) %>%
+      dplyr::slice_min(order_by = .data[['distance']], n = 1)
+    fuzzy <- fuzzy[, c('iso3', 'cmatch.x', countryvar, yearvar, newvars)]
+    names(fuzzy) <- c('iso3', 'country', 'cname_used', yearvar, newvars)
 
-      fLink_match <- getMatches(dfA = base_unique,
-                          dfB = newdata,
-                          fl.out = fLink,
-                          combine.dfs = F)
-
-      fuzzy <- cbind(fLink_match$dfA.match[,c('iso3', 'cmatch')], fLink_match$dfB.match[,c(countryvar, yearvar, newvars)])
-      names(fuzzy) <- c('iso3', 'country', 'cname_used', yearvar, newvars)
-      fuzzy$merge  <- 'fastLink'
-      #m <- cbind(match$dfA.match, match$dfB.match)
-    }
-
-    if (fuzzy_match == 'fuzzyjoin'){
-      fuzzy <- stringdist_left_join(base_unique, newdata,
-                           by = "cmatch",
-                           method = "jw",
-                           distance_col = "distance") %>%
-        dplyr::group_by_at(c('cmatch.x', yearvar)) %>%
-        dplyr::slice_min(order_by = .data[['distance']], n = 1)
-      fuzzy <- fuzzy[, c('iso3', 'cmatch.x', countryvar, yearvar, newvars)]
-      names(fuzzy) <- c('iso3', 'country', 'cname_used', yearvar, newvars)
-      fuzzy$merge  <- 'fuzzyjoin'
-    }
-
+    fuzzy$merge  <- 'fuzzyjoin'
     newdata$merge <- 'exact'
     xcol <- c('year', 'country')
     if (is.null(yearvar)) xcol <- c('country')
