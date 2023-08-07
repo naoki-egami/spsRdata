@@ -23,8 +23,6 @@ merge_data(
 \item{countryvar}{Country column name in \code{newdata}.}
 
 \item{iso}{Whether or not the \code{countryvar} is an ISO3 code. If TRUE, the \code{newdata} is merged only using the iso3 code. If FALSE, the \code{newdata} is merged using exact match, followed by a probabilistic match using \code{fastLink} Default is FALSE.}
-
-\item{fuzzy_match}{Type of fuzzy match to be conducted. Choose from "fastLink" or "fuzzyjoin" (default).}
 }
 \value{
 A dataframe with new variables merged.

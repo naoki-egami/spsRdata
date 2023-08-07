@@ -10,7 +10,7 @@
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 
-merge_data <- function(basedata, newdata = NULL, yearvar = NULL, countryvar = NULL, iso = FALSE, fuzzy_match = "fuzzyjoin"){
+merge_data <- function(basedata, newdata = NULL, yearvar = NULL, countryvar = NULL, iso = FALSE){
   if (nrow(newdata[duplicated(newdata[,c(yearvar, countryvar)]),])>0){
     stop('ERROR: newdata is not unique by countryvar (and yearvar). Check the data before merging.')
   }
