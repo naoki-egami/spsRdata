@@ -18,11 +18,8 @@ Imports:
     vdemdata,
     wbstats,
     fastLink,
-    maps,
     countrycode,
     ggplot2,
-    Amelia,
-    miceRanger,
     Hmisc,
     stats
 Remotes: vdeminstitute/vdemdata

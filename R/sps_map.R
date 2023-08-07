@@ -4,8 +4,6 @@
 #' @param targetvar Name of the binary indicator variable in \code{data} that indicates target population. Default is NULL, which treats all countries as target population.
 #' @param countryvar Name of the country variable in \code{data}.
 #' @param countrysps A character vector including country names selected from SPS. Values must come from the variable selected in \code{countryvar}.
-#' @import maps
-#' @import dplyr
 #' @import ggplot2
 #' @importFrom countrycode countrycode
 #' @return A dataframe with new variables merged.
@@ -14,7 +12,8 @@
 
 sps_map <- function(data, targetvar = NULL, countryvar = NULL, countrysps = NULL){
   # World map data
-  world_map <- map_data("world") %>% mutate(region = ifelse(region %in% c('Trinidad', 'Tobago'), 'Trinidad and Tobago', region))
+  world_map <- map_data("world")
+  world_map$region <- ifelse(world_map$region %in% c('Trinidad', 'Tobago'), 'Trinidad and Tobago', world_map$region)
   world_map$iso3 <- countrycode::countrycode(world_map$region, "country.name", "iso3c",
                                 custom_match = c('Micronesia'     = 'FSM',
                                                  'Virgin Islands' = 'VIR',
@@ -28,8 +27,9 @@ sps_map <- function(data, targetvar = NULL, countryvar = NULL, countrysps = NULL
   # Merge region information
   data$target <- ifelse(data[[countryvar]] %in% countrysps, 'Selected Countries', 'Target Population')
   if (!is.null(targetvar)) data$target <- ifelse(data[[targetvar]] == 0, 'Target Population', data$target)
-
-  world_map <- left_join(world_map, distinct(data %>% select(target, iso3, matches(paste0('^',countryvar,'$')))), by = 'iso3')
+  data <- data[,c('iso3', 'target', countryvar)]
+  world_map <- merge(world_map, data[!duplicated(data),], by = 'iso3', all.x = TRUE, sort = FALSE)
+  world_map <-world_map[order(world_map$order),]
   world_map$target <- ifelse(is.na(world_map$target) & !is.null(targetvar), 'Rest of the World',
                              ifelse(is.na(world_map$target) & is.null(targetvar), 'Target Population', world_map$target))
 
