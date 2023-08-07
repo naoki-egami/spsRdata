@@ -24,10 +24,12 @@ sps_map <- function(data, targetvar = NULL, countryvar = NULL, countrysps = NULL
                                                  'Kosovo'     = 'XKX'))
 
   # Merge region information
-  data$target <- ifelse(data[[countryvar]] %in% countrysps, 'Selected Countries', 'Target Population')
-  if (!is.null(targetvar)) data$target <- ifelse(data[[targetvar]] == 0, 'Target Population', data$target)
+  if (is.null(targetvar))  data$target <- ifelse(data[[countryvar]] %in% countrysps, 'Selected Countries', 'Target Population')
+  if (!is.null(targetvar)) data$target <- ifelse(data[[countryvar]] %in% countrysps, 'Selected Countries',
+                                                 ifelse(data[[targetvar]] == 1, 'Target Population', 'Rest of the World'))
+
   data <- data[,c('iso3', 'target', countryvar)]
-  world_map <- merge(world_map, data[!duplicated(data),], by = 'iso3', all.x = TRUE, sort = FALSE)
+  world_map <- merge(world_map, data[!duplicated(data),], by = 'iso3', all.x = TRUE)
   world_map <-world_map[order(world_map$order),]
   world_map$target <- ifelse(is.na(world_map$target) & !is.null(targetvar), 'Rest of the World',
                              ifelse(is.na(world_map$target) & is.null(targetvar), 'Target Population', world_map$target))
