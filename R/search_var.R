@@ -2,6 +2,7 @@
 #' @param keyword A character string with a keyword to search for. Also allows for regex notation.
 #' @import vdemdata
 #' @import wbstats
+#' @import devtools
 #' @return A dataframe with list of variable names, descriptions, variable source, and coverage.
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
