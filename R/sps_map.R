@@ -1,4 +1,3 @@
-#' Synthetic Purposive Sampling: Dataset for Site Selection
 #' Create a world map with target population and selected countries from SPS indicated.
 #' @param data Data frame Default is sps_data.
 #' @param targetvar Name of the binary indicator variable in \code{data} that indicates target population. Default is NULL, which treats all countries as target population.
@@ -12,7 +11,7 @@
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 
-sps_map <- function(data = sps_data, targetvar = NULL, countryvar = NULL, countrysps = NULL){
+sps_map <- function(data, targetvar = NULL, countryvar = NULL, countrysps = NULL){
   # World map data
   world_map <- map_data("world") %>% mutate(region = ifelse(region %in% c('Trinidad', 'Tobago'), 'Trinidad and Tobago', region))
   world_map$iso3 <- countrycode::countrycode(world_map$region, "country.name", "iso3c",

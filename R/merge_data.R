@@ -1,4 +1,3 @@
-#' Synthetic Purposive Sampling: Dataset for Site Selection
 #' Merge external dataset
 #' @param basedata Data frame for new variables to be merged onto. Default is \code{sps_data}.
 #' @param newdata Data frame that contains new variables. All variables included in the dataset except for the variables asserted in \code{countryvar} and \code{yearvar} will be merged on to \code{basedata} automatically.
@@ -12,7 +11,7 @@
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 
-merge_data <- function(basedata = sps_data, newdata = NULL, yearvar = NULL, countryvar = NULL, iso = FALSE){
+merge_data <- function(basedata, newdata = NULL, yearvar = NULL, countryvar = NULL, iso = FALSE){
   if (nrow(newdata[duplicated(newdata[,c(yearvar, countryvar)]),])>0){
     stop('ERROR: newdata is not unique by countryvar (and yearvar). Check the data before merging.')
   }

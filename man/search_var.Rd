@@ -2,8 +2,7 @@
 % Please edit documentation in R/search_var.R
 \name{search_var}
 \alias{search_var}
-\title{Synthetic Purposive Sampling: Dataset for Site Selection
-Search for Additional Covariates from V-Dem Dataset and World Bank API}
+\title{Search for Additional Covariates from V-Dem Dataset and World Bank API}
 \usage{
 search_var(keyword = NULL)
 }
@@ -14,11 +13,7 @@ search_var(keyword = NULL)
 A dataframe with list of variable names, descriptions, variable source, and coverage.
 }
 \description{
-Synthetic Purposive Sampling: Dataset for Site Selection
 Search for Additional Covariates from V-Dem Dataset and World Bank API
-}
-\examples{
-search <- search_var(keyword = "migrant")
 }
 \references{
 Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.

@@ -2,10 +2,9 @@
 % Please edit documentation in R/desc_stat.R
 \name{desc_stat}
 \alias{desc_stat}
-\title{Synthetic Purposive Sampling: Dataset for Site Selection
-Provide useful summary statistic of selected variables}
+\title{Provide useful summary statistic of selected variables}
 \usage{
-desc_stat(data = sps_data)
+desc_stat(data)
 }
 \arguments{
 \item{data}{Data frame for new variables to be merged onto. Default is sps_data.}
@@ -19,7 +18,6 @@ desc_stat(data = sps_data)
  }
 }
 \description{
-Synthetic Purposive Sampling: Dataset for Site Selection
 Provide useful summary statistic of selected variables
 }
 \references{

@@ -2,11 +2,10 @@
 % Please edit documentation in R/merge_data.R
 \name{merge_data}
 \alias{merge_data}
-\title{Synthetic Purposive Sampling: Dataset for Site Selection
-Merge external dataset}
+\title{Merge external dataset}
 \usage{
 merge_data(
-  basedata = sps_data,
+  basedata,
   newdata = NULL,
   yearvar = NULL,
   countryvar = NULL,
@@ -28,7 +27,6 @@ merge_data(
 A dataframe with new variables merged.
 }
 \description{
-Synthetic Purposive Sampling: Dataset for Site Selection
 Merge external dataset
 }
 \references{

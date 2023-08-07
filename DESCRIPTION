@@ -15,8 +15,8 @@ Depends:
 Imports:
     tidyr,
     dplyr,
-    vdemdata,
     wbstats,
+    vdemdata,
     fastLink,
     jsonlite,
     httr,
@@ -27,6 +27,9 @@ Imports:
     miceRanger,
     labelled,
     Hmisc,
-    stats
+    stats,
+    devtools
+Remotes: 
+  vdeminstitute/vdemdata
 RoxygenNote: 7.2.3
 URL: http://naokiegami.com/spsRdata/
