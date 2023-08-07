@@ -1,4 +1,3 @@
-#' Synthetic Purposive Sampling: Dataset for Site Selection
 #' Merge external dataset
 #' @param basedata Data frame for new variables to be merged onto. We recommend you use \code{sps_data}.
 #' @param newdata Data frame that contains new variables. All variables included in the dataset except for the variables asserted in \code{countryvar} and \code{yearvar} will be merged on to \code{basedata} automatically.

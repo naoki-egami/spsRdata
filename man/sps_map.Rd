@@ -2,15 +2,9 @@
 % Please edit documentation in R/sps_map.R
 \name{sps_map}
 \alias{sps_map}
-\title{Synthetic Purposive Sampling: Dataset for Site Selection
-Create a world map with target population and selected countries from SPS indicated.}
+\title{Create a world map with target population and selected countries from SPS indicated.}
 \usage{
-sps_map(
-  data = sps_data,
-  targetvar = NULL,
-  countryvar = NULL,
-  countrysps = NULL
-)
+sps_map(data, targetvar = NULL, countryvar = NULL, countrysps = NULL)
 }
 \arguments{
 \item{data}{Data frame Default is sps_data.}
@@ -25,7 +19,6 @@ sps_map(
 A dataframe with new variables merged.
 }
 \description{
-Synthetic Purposive Sampling: Dataset for Site Selection
 Create a world map with target population and selected countries from SPS indicated.
 }
 \references{

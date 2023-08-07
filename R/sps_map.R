@@ -1,4 +1,3 @@
-#' Synthetic Purposive Sampling: Dataset for Site Selection
 #' Create a world map with target population and selected countries from SPS indicated.
 #' @param data Data frame where \code{targetvar} and \code{countryvar} are stored.
 #' @param targetvar Name of the binary indicator variable in \code{data} that indicates target population. Default is NULL, which treats all countries as target population.

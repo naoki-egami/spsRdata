@@ -2,10 +2,9 @@
 % Please edit documentation in R/add_var.R
 \name{add_var}
 \alias{add_var}
-\title{Synthetic Purposive Sampling: Dataset for Site Selection
-Add Additional Covariates from V-Dem Dataset and/or World Bank API}
+\title{Add Additional Covariates from V-Dem Dataset and/or World Bank API}
 \usage{
-add_var(data = sps_data, vars = NULL)
+add_var(data, vars = NULL)
 }
 \arguments{
 \item{data}{Dataframe for new variables to be merged onto. Default is sps_data. A dataset must have a column 'iso3' and 'year'.}
@@ -16,7 +15,6 @@ add_var(data = sps_data, vars = NULL)
 A dataframe with new variables merged on
 }
 \description{
-Synthetic Purposive Sampling: Dataset for Site Selection
 Add Additional Covariates from V-Dem Dataset and/or World Bank API
 }
 \references{

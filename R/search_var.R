@@ -1,11 +1,8 @@
-#' Synthetic Purposive Sampling: Dataset for Site Selection
 #' Search for Additional Covariates from V-Dem Dataset and World Bank API
 #' @param keyword A character string with a keyword to search for. Also allows for regex notation.
 #' @import vdemdata
 #' @import wbstats
 #' @return A dataframe with list of variable names, descriptions, variable source, and coverage.
-#' @examples
-#' search <- search_var(keyword = "migrant")
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 

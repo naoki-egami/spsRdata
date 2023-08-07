@@ -1,4 +1,3 @@
-#' Synthetic Purposive Sampling: Dataset for Site Selection
 #' Provide useful summary statistic of selected variables
 #' @param data Data frame for new variables to be merged onto (e.g., \code{sps_data}).
 #' @import dplyr
@@ -17,15 +16,15 @@
 desc_stat <- function(data){
   # descriptive stat
   df_desc <- NULL
-  vars    <- names(data)[which(!(names(data) %in% c('country', 'iso3', 'region', 'year', 'match', 'lang', 'cname_used')))]
+  vars    <- names(data)[which(!(names(data) %in% c("country", "iso3", "region", "year", "match", "lang", "cname_used")))]
 
   # dummify character/factor variables
   for (i in vars){
     if (is.character(data[[i]])|is.factor(data[[i]])){
       vars <- vars[vars != i]
       for (j in unique(na.omit(data[[i]]))){
-        data[[paste0(i, ':', j)]] <- ifelse(is.na(data[[i]]), NA, as.numeric(as.character(data[[i]]) == j))
-        vars <- c(vars, paste0(i, ':', j))
+        data[[paste0(i, ":", j)]] <- ifelse(is.na(data[[i]]), NA, as.numeric(as.character(data[[i]]) == j))
+        vars <- c(vars, paste0(i, ":", j))
       }
     }
   }
@@ -44,7 +43,7 @@ desc_stat <- function(data){
     for (y in unique(na.omit(data$year))){
       miss <- bind_rows(miss, data.frame(year = y, nmiss = sum(is.na(data[[i]][data$year == y]))))
     }
-    miss <- tidyr::pivot_wider(miss, names_from = year, values_from = nmiss, names_prefix = ('nmiss:'))
+    miss <- tidyr::pivot_wider(miss, names_from = year, values_from = nmiss, names_prefix = ("nmiss:"))
     df_desc <- bind_rows(df_desc,
                          cbind(data.frame(variable = i,
                                           mean = avg, stdev = sd,
@@ -56,7 +55,7 @@ desc_stat <- function(data){
   # correlation check
   cor <- Hmisc::rcorr(as.matrix(data[,vars]))
 
-  return(list(desc = df_desc[, 1:(which(names(df_desc) == 'nmiss_total'))],
-              miss = df_desc[, c(1, which(names(df_desc) == 'nmiss_total'):ncol(df_desc))],
+  return(list(desc = df_desc[, 1:(which(names(df_desc) == "nmiss_total"))],
+              miss = df_desc[, c(1, which(names(df_desc) == "nmiss_total"):ncol(df_desc))],
               corr = cor$r))
 }
