@@ -5,7 +5,7 @@
 #' @keywords datasets
 NULL
 
-#' Codebook for sps_data
+#' Codebook for \code{sps_data}
 #' @name codebook
 #' @docType data
 #' @format data
