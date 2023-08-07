@@ -45,7 +45,7 @@ merge_data <- function(basedata, newdata = NULL, yearvar = NULL, countryvar = NU
     fuzzy <- fuzzy[, c('iso3', 'cmatch.x', countryvar, yearvar, newvars)]
     names(fuzzy) <- c('iso3', 'country', 'cname_used', yearvar, newvars)
 
-    fuzzy$merge  <- 'fuzzyjoin'
+    fuzzy$merge  <- 'fuzzy'
     newdata$merge <- 'exact'
     xcol <- c('year', 'country')
     if (is.null(yearvar)) xcol <- c('country')

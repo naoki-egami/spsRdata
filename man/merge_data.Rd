@@ -9,8 +9,7 @@ merge_data(
   newdata = NULL,
   yearvar = NULL,
   countryvar = NULL,
-  iso = FALSE,
-  fuzzy_match = "fuzzyjoin"
+  iso = FALSE
 )
 }
 \arguments{
