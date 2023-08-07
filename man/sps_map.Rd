@@ -7,7 +7,7 @@
 sps_map(data, targetvar = NULL, countryvar = NULL, countrysps = NULL)
 }
 \arguments{
-\item{data}{Data frame Default is sps_data.}
+\item{data}{Data frame where \code{targetvar} and \code{countryvar} are stored.}
 
 \item{targetvar}{Name of the binary indicator variable in \code{data} that indicates target population. Default is NULL, which treats all countries as target population.}
 

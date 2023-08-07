@@ -41,10 +41,10 @@ sps_map <- function(data, targetvar = NULL, countryvar = NULL, countrysps = NULL
     col <- c('red4', 'chartreuse4', 'gray')
   }
 
-  gmap <- ggplot(data = world_map, aes(map_id = region)) +
+  gmap <- ggplot(data = world_map, aes(map_id = world_map$region)) +
     geom_map(data = world_map,
              map  = world_map,
-             aes(fill = target)) +
+             aes(fill = world_map$target)) +
     scale_fill_manual(na.value = 'white', values = col) +
     xlab('') + ylab('') +
     expand_limits(x = world_map$long, y = world_map$lat) +

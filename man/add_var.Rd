@@ -7,7 +7,7 @@
 add_var(data, vars = NULL)
 }
 \arguments{
-\item{data}{Dataframe for new variables to be merged onto. Default is sps_data. A dataset must have a column 'iso3' and 'year'.}
+\item{data}{Dataframe for new variables to be merged onto (we recommend you use \code{sps_data}). A dataset must have a column 'iso3' and 'year'.}
 
 \item{vars}{A character vector with one or more variable names from V-Dem dataset or World Bank Indicators.}
 }

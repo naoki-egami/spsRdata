@@ -41,9 +41,9 @@ desc_stat <- function(data){
     # by-year missing values
     miss <- NULL
     for (y in unique(na.omit(data$year))){
-      miss <- bind_rows(miss, data.frame(year = y, nmiss = sum(is.na(data[[i]][data$year == y]))))
+      miss <- rbind(miss, data.frame(year = y, nmiss = sum(is.na(data[[i]][data$year == y]))))
     }
-    miss <- tidyr::pivot_wider(miss, names_from = year, values_from = nmiss, names_prefix = ("nmiss:"))
+    miss <- tidyr::pivot_wider(miss, names_from = 'year', values_from = 'nmiss', names_prefix = ("nmiss:"))
     df_desc <- bind_rows(df_desc,
                          cbind(data.frame(variable = i,
                                           mean = avg, stdev = sd,

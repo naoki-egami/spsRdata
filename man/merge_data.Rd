@@ -13,7 +13,7 @@ merge_data(
 )
 }
 \arguments{
-\item{basedata}{Data frame for new variables to be merged onto. Default is \code{sps_data}.}
+\item{basedata}{Data frame for new variables to be merged onto. We recommend you use \code{sps_data}.}
 
 \item{newdata}{Data frame that contains new variables. All variables included in the dataset except for the variables asserted in \code{countryvar} and \code{yearvar} will be merged on to \code{basedata} automatically.}
 

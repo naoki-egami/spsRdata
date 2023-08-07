@@ -18,6 +18,7 @@ Imports:
     wbstats,
     vdemdata,
     fastLink,
+    fuzzyjoin,
     countrycode,
     ggplot2,
     Hmisc,

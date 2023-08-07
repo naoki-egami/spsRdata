@@ -7,7 +7,7 @@
 desc_stat(data)
 }
 \arguments{
-\item{data}{Data frame for new variables to be merged onto. Default is sps_data.}
+\item{data}{Data frame for new variables to be merged onto (e.g., \code{sps_data}).}
 }
 \value{
 \code{desc_stat} returns a list containing the following elements:
