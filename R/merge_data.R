@@ -6,8 +6,8 @@
 #' @param iso Whether or not the \code{countryvar} is an ISO3 code. If TRUE, the \code{newdata} is merged only using the iso3 code. If FALSE, the \code{newdata} is merged using exact match, followed by a probabilistic match using \code{fastLink} Default is FALSE.
 #' @param fuzzy_match Type of fuzzy match to be conducted. Choose from "fastLink" or "fuzzyjoin" (default).
 #' @import fastLink
-#' @import dplyr
 #' @import fuzzyjoin
+#' @importFrom dplyr group_by_at slice_min
 #' @return A dataframe with new variables merged.
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
@@ -61,12 +61,8 @@ merge_data <- function(basedata, newdata = NULL, yearvar = NULL, countryvar = NU
                            by = "cmatch",
                            method = "jw",
                            distance_col = "distance") %>%
-        group_by_at(c('cmatch.x', yearvar)) %>%
-        slice_min(order_by = .data[['distance']], n = 1)
-
-      # Combine the results into a data frame
-      result <- do.call(rbind, min_rows)
-
+        dplyr::group_by_at(c('cmatch.x', yearvar)) %>%
+        dplyr::slice_min(order_by = .data[['distance']], n = 1)
       fuzzy <- fuzzy[, c('iso3', 'cmatch.x', countryvar, yearvar, newvars)]
       names(fuzzy) <- c('iso3', 'country', 'cname_used', yearvar, newvars)
       fuzzy$merge  <- 'fuzzyjoin'
