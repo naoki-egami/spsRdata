@@ -19,6 +19,8 @@ Imports:
     vdemdata,
     fuzzyjoin,
     countrycode,
+    Amelia,
+    miceRanger,
     ggplot2,
     Hmisc,
     stats,

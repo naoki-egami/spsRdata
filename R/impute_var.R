@@ -6,10 +6,11 @@
 #' @param method Imputation method. Choose from "carryforward" (default), "amelia", and "miceranger".
 #' @param carryforward_yrs Maximum number of years allowed to be carried forward. Used only when "carryforward" is selected for \code{method}. Default is NULL, which will impute values from the most recent years available.
 #' @param ... Arguments passed onto \code{Amelia::amelia} or \code{miceRanger::miceRanger}.
-#' @importFrom dplyr arrange group_by fill
+#' @importFrom dplyr arrange group_by
+#' @importFrom tidyr fill
 #' @importFrom Amelia amelia
-#' @importFrom miceRanger miceRanger
 #' @importFrom stats na.omit
+#' @import miceRanger
 #' @return A dataframe with new variables merged on
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
