@@ -4,6 +4,7 @@
 #' @param yearvar Year column name in \code{newdata}.
 #' @param countryvar Country column name in \code{newdata}.
 #' @param iso Whether or not the \code{countryvar} is an ISO3 code. If TRUE, the \code{newdata} is merged only using the iso3 code. If FALSE, the \code{newdata} is merged using exact match, followed by a probabilistic match using \code{fastLink} Default is FALSE.
+#' @param fuzzy_match Type of fuzzy match to be conducted. Choose from "fastLink" or "fuzzyjoin" (default).
 #' @import fastLink
 #' @import dplyr
 #' @import fuzzyjoin
@@ -11,7 +12,7 @@
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 
-merge_data <- function(basedata, newdata = NULL, yearvar = NULL, countryvar = NULL, iso = FALSE){
+merge_data <- function(basedata, newdata = NULL, yearvar = NULL, countryvar = NULL, iso = FALSE, fuzzy_match = "fuzzyjoin"){
   if (nrow(newdata[duplicated(newdata[,c(yearvar, countryvar)]),])>0){
     stop('ERROR: newdata is not unique by countryvar (and yearvar). Check the data before merging.')
   }
@@ -37,7 +38,7 @@ merge_data <- function(basedata, newdata = NULL, yearvar = NULL, countryvar = NU
     names(base_unique) <- c('iso3', 'cmatch')
     newdata$cmatch <- newdata[[countryvar]]
 
-    if (fuzz_match = 'fastLink'){
+    if (fuzzy_match == 'fastLink'){
       fLink <- fastLink(dfA = base_unique,
                         dfB = newdata,
                         varnames         = c('cmatch'),
@@ -55,13 +56,17 @@ merge_data <- function(basedata, newdata = NULL, yearvar = NULL, countryvar = NU
       #m <- cbind(match$dfA.match, match$dfB.match)
     }
 
-    if (fuzz_match = 'fastLink'){
+    if (fuzzy_match == 'fuzzyjoin'){
       fuzzy <- stringdist_left_join(base_unique, newdata,
                            by = "cmatch",
                            method = "jw",
                            distance_col = "distance") %>%
-        group_by(cmatch.x) %>%
-        slice_min(order_by = distance, n = 1)
+        group_by_at(c('cmatch.x', yearvar)) %>%
+        slice_min(order_by = .data[['distance']], n = 1)
+
+      # Combine the results into a data frame
+      result <- do.call(rbind, min_rows)
+
       fuzzy <- fuzzy[, c('iso3', 'cmatch.x', countryvar, yearvar, newvars)]
       names(fuzzy) <- c('iso3', 'country', 'cname_used', yearvar, newvars)
       fuzzy$merge  <- 'fuzzyjoin'
