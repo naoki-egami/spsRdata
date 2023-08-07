@@ -10,9 +10,6 @@
 #' @export
 
 search_var <- function(keyword = NULL){
-  vdem <- try(find_var(keyword) %>% transmute(Variable = tag, Name = name, Description = clarification, Coverage = years))
-  wb   <- try(wb_search(keyword) %>% transmute(Variable = indicator_id, Name = indicator, Description = indicator_desc, Coverage = 'Annual'))
-
   vdem <- try(find_var(keyword)[,c('tag', 'name', 'clarification', 'years')])
   names(vdem) <- c('Variable', 'Name', 'Description', 'Coverage')
 

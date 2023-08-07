@@ -18,15 +18,13 @@ Imports:
     vdemdata,
     wbstats,
     fastLink,
-    jsonlite,
-    httr,
     maps,
     countrycode,
     ggplot2,
     Amelia,
     miceRanger,
-    labelled,
     Hmisc,
     stats
+Remotes: vdeminstitute/vdemdata
 RoxygenNote: 7.2.3
 URL: http://naokiegami.com/spsRdata/

@@ -1,6 +1,6 @@
 #' Synthetic Purposive Sampling: Dataset for Site Selection
 #' Provide useful summary statistic of selected variables
-#' @param data Data frame for new variables to be merged onto. Default is sps_data.
+#' @param data Data frame for new variables to be merged onto (e.g., \code{sps_data}).
 #' @import dplyr
 #' @importFrom tidyr pivot_wider
 #' @importFrom Hmisc rcorr
@@ -14,7 +14,7 @@
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 
-desc_stat <- function(data = sps_data){
+desc_stat <- function(data){
   # descriptive stat
   df_desc <- NULL
   vars    <- names(data)[which(!(names(data) %in% c('country', 'iso3', 'region', 'year', 'match', 'lang', 'cname_used')))]
