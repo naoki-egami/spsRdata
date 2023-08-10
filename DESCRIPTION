@@ -18,7 +18,6 @@ Imports:
     wbstats,
     vdemdata,
     fuzzyjoin,
-    countrycode,
     Amelia,
     miceRanger,
     ggplot2,

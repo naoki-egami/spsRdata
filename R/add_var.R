@@ -1,11 +1,10 @@
 #' Add Additional Covariates from V-Dem Dataset and/or World Bank API
-#' @param data Dataframe for new variables to be merged onto (we recommend you use \code{sps_data}). A dataset must have a column 'iso3' and 'year'.
-#' @param vars A character vector with one or more variable names from V-Dem dataset or World Bank Indicators.
+#' @param data data.frame where new variables should be merged onto (we recommend you use \code{sps_country_data}). A dataset must have a column 'iso3' and 'year'.
+#' @param vars (Default = \code{NULL}) A character vector with one or more variable names from V-Dem dataset or World Bank Indicators.
 #' @import vdemdata
 #' @import wbstats
-#' @import dplyr
 #' @import devtools
-#' @return A dataframe with new variables merged on
+#' @return A data.frame with new variables merged onto \code{data}.
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 

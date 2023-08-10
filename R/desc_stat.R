@@ -1,6 +1,5 @@
 #' Provide useful summary statistic of selected variables
-#' @param data Data frame for new variables to be merged onto (e.g., \code{sps_data}).
-#' @import dplyr
+#' @param data data.frame to perform summary statistics.
 #' @importFrom tidyr pivot_wider
 #' @importFrom Hmisc rcorr
 #' @importFrom stats quantile na.omit
@@ -44,7 +43,7 @@ desc_stat <- function(data){
       miss <- rbind(miss, data.frame(year = y, nmiss = sum(is.na(data[[i]][data$year == y]))))
     }
     miss <- tidyr::pivot_wider(miss, names_from = 'year', values_from = 'nmiss', names_prefix = ("nmiss:"))
-    df_desc <- bind_rows(df_desc,
+    df_desc <- rbind(df_desc,
                          cbind(data.frame(variable = i,
                                           mean = avg, stdev = sd,
                                           min = min, p10 = qtile[1], p25 = qtile[2], p50 = qtile[3], p75 = qtile[4], p90 = qtile[5], max = max,
