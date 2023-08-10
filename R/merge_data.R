@@ -1,9 +1,8 @@
 #' Merge external dataset
-#' @param basedata data.frame for new variables to be merged onto. We recommend you use \code{sps_data}.
-#' @param newdata data.frame that contains new variables. All variables included in the dataset except for the variables asserted in \code{id_country} and \code{id_year} will be merged on to \code{basedata} automatically.
-#' @param id_country (Default = \code{NULL}) A country variable name included in \code{newdata}.
-#' @param id_year (Optional, Default = \code{NULL}) A year variable name included in \code{newdata}.If \code{NULL}, values in new variables will be merged to every year in `basedata`.
-#' @param iso3 (Default = \code{FALSE}) Logical \code{TRUE}/\code{FALSE} on whether or not the \code{id_country} is an ISO3 country code. If \code{TRUE}, \code{newdata} is merged only using the iso3 code. If \code{FALSE}, then \code{newdata} is merged using exact match, followed by a fuzzy match using \code{fuzzyjoin::stringdist_join()}.
+#' @param basedata data.frame for new variables to be merged onto.
+#' @param newdata data.frame that contains new variables. All variables included in the dataset except for the variables asserted in \code{id_site} and \code{id_year} will be merged on to \code{basedata} automatically.
+#' @param id_site (Default = \code{NULL}) A site variable name included in \code{basedata} and \code{newdata}.
+#' @param id_year (Optional, Default = \code{NULL}) A year variable name included in \code{basedata} and \code{newdata}. If \code{NULL}, assumes \code{newdata} is cross-sectional.
 #' @param ... Arguments passed onto \code{fuzzymatch::stringdist_join()}.
 #' @import fuzzyjoin
 #' @importFrom dplyr group_by_at slice_min
@@ -11,64 +10,88 @@
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 
-merge_data <- function(basedata, newdata, id_year = NULL, id_country = NULL, iso3 = FALSE, ...){
-  if (nrow(newdata[duplicated(newdata[,c(id_year, id_country)]),])>0){
-    stop('ERROR: newdata is not unique by id_country (and id_year). Check the data before merging.')
+merge_data <- function(basedata, newdata, id_site = NULL, id_year = NULL, ...){
+  if (is.null(id_site)){
+    stop('id_site must be specified.')
   }
-  if (!('iso3' %in% names(basedata))){
-    stop('ERROR: make sure you have iso3 in basedata.')
-  }
-  if (iso3 == TRUE){
-    xcol <- c('year', 'iso3')
-    if (is.null(id_year)) xcol <- c('iso3')
 
-    newdata$match <- 'exact:iso3'
-    data <- merge(basedata,
-                  newdata,
-                  by.x = xcol,
-                  by.y = c(id_year, id_country),
-                  all.x = TRUE)
+  if (!id_site %in% names(basedata)){
+    stop('id_site does not exist in basedata.')
   }
-  else{
+
+  if (!id_site %in% names(newdata)){
+    stop('id_site does not exist in newdata.')
+  }
+
+  if (is.null(id_year)){
+    warning('id_year unspecified. Assumes newdata is cross-sectional.')
+  }
+
+  if (!is.null(id_year)){
+    if (!id_year %in% names(basedata)){
+      stop('id_year variable does not exist in basedata.')
+    }
+    if (!id_year %in% names(newdata)){
+      stop('id_year variable does not exist in newdata.')
+    }
+  }
+
+  if (nrow(newdata[duplicated(newdata[,c(id_year, id_site)]),])>0){
+    stop('newdata is not unique by id_site (and id_year). Check the data before merging.')
+  }
+
+  # if (iso3 == TRUE){
+  #   xcol <- c(id_year, id_site)
+  #   if (is.null(id_year)) xcol <- id_site
+  #   data <- merge(basedata,
+  #                 newdata,
+  #                 by.x = xcol,
+  #                 by.y = c(id_year, id_site),
+  #                 all.x = TRUE)
+  # }
+  # else{
     # Try exact matching first
-    newvars <- names(newdata)[which(!names(newdata) %in% c(id_year, id_country))]
-    base_unique <- basedata[,c('iso3', 'country')]
-    base_unique <- base_unique[!duplicated(base_unique),]
-    names(base_unique) <- c('iso3', 'cmatch')
-    newdata$cmatch <- newdata[[id_country]]
+    newvars <- names(newdata)[which(!names(newdata) %in% c(id_year, id_site))]
+    base_unique <- data.frame(basedata[!duplicated(basedata[[id_site]]),id_site])
+    names(base_unique) <- 'sitevar'
+    newdata$sitevar <- newdata[[id_site]]
 
     fuzzy <- stringdist_join(base_unique,
                              newdata,
-                             by = "cmatch",
+                             by = "sitevar",
                              distance_col = "distance",
                              mode = "inner",
                              max_dist = 20,
                              ...)
-    fuzzy <- dplyr::group_by_at(fuzzy, c('cmatch.y', id_year))
+
+    fuzzy <- dplyr::group_by_at(fuzzy, c('sitevar.y', id_year))
     fuzzy <- dplyr::slice_min(fuzzy, order_by = .data[['distance']], n = 1, with_ties = FALSE)
     if (max(fuzzy$distance)>0){
-      warning(paste('\nFollowing countries were matched using fuzzy-match:\n',
-                    paste(paste(fuzzy$cmatch.y[fuzzy$distance>0], '=>', fuzzy$cmatch.x[fuzzy$distance>0]), collapse = '\n '),
-                    '\nPlease review and if necessary, recode the country names in your dataset or supply the ISO3 code instead.'))
+      warning(paste('\nFollowing sites are matched using fuzzyjoin:\n',
+                    paste(paste(fuzzy$sitevar.y[fuzzy$distance>0], '=>', fuzzy$sitevar.x[fuzzy$distance>0]), collapse = '\n '),
+                    '\nPlease review and if necessary, recode the site names in your dataset. For a country-level dataset, consider supplying ISO3 code instead.'))
     }
-    # fuzzy <- fuzzy[, c('iso3', 'cmatch.x', id_country, id_year, newvars)]
+    # fuzzy <- fuzzy[, c('iso3', 'sitevar.x', id_site, id_year, newvars)]
     # names(fuzzy) <- c('iso3', 'country', 'cname_used', id_year, newvars)
-    fuzzy <- fuzzy[, c('iso3', 'cmatch.x', id_year, newvars)]
-    names(fuzzy) <- c('iso3', 'country', id_year, newvars)
+    fuzzy <- fuzzy[, c('sitevar.x', id_year, newvars)]
+    names(fuzzy) <- c(id_site, id_year, newvars)
 
-    fuzzy$merge  <- 'fuzzy'
-    newdata$merge <- 'exact'
-    xcol <- c('year', 'country')
-    if (is.null(id_year)) xcol <- c('country')
-    data0 <- merge(basedata, newdata[,c(id_country, id_year, newvars, 'merge')], by.x = xcol, by.y = c(id_year, id_country), all.x = TRUE)
-    data1 <- merge(data0, fuzzy, by.x = c(xcol, 'iso3'), by.y = c(id_year, 'country', 'iso3'), all.x = TRUE, suffixes = c('', '.f'))
-    data1$match <- ifelse(is.na(data1$merge), data1$merge.f, data1$merge)
+    # fuzzy$merge  <- 'fuzzy'
+    # newdata$merge <- 'exact'
+
+    xcol <- c(id_year, id_site)
+    if (is.null(id_year)) xcol <- id_site
+
+    # data0 <- merge(basedata, newdata[,c(id_site, id_year, newvars, 'merge')], by.x = xcol, by.y = c(id_year, id_site), all.x = TRUE)
+    # data1 <- merge(data0, fuzzy, by.x = xcol, by.y = xcol, all.x = TRUE, suffixes = c('', '.f'))
+    data <- merge(basedata, fuzzy, by.x = xcol, by.y = xcol, all.x = TRUE, suffixes = c('', '.f'))
+    # data1$match <- ifelse(is.na(data1$merge), data1$merge.f, data1$merge)
     # data1$cname_used <- ifelse(data1$match == 'exact', data1$country, data1$cname_used)
-    for (i in newvars){
-      data1[[i]] <- ifelse(is.na(data1$match), NA, ifelse(data1$match == 'exact', data1[[i]], data1[[paste0(i, '.f')]]))
-    }
+    # for (i in newvars){
+    #   data[[i]] <- ifelse(is.na(data$match), NA, ifelse(data$match == 'exact', data[[i]], data[[paste0(i, '.f')]]))
+    # }
     # data <- data1[,c(names(basedata), newvars, 'match', 'cname_used')]
-    data <- data1[,c(names(basedata), newvars)]
-  }
+    # data <- data[, c(names(basedata), newvars)]
+  # }
   return(data)
 }

@@ -4,25 +4,16 @@
 \alias{merge_data}
 \title{Merge external dataset}
 \usage{
-merge_data(
-  basedata,
-  newdata,
-  id_year = NULL,
-  id_country = NULL,
-  iso3 = FALSE,
-  ...
-)
+merge_data(basedata, newdata, id_site = NULL, id_year = NULL, ...)
 }
 \arguments{
-\item{basedata}{data.frame for new variables to be merged onto. We recommend you use \code{sps_data}.}
+\item{basedata}{data.frame for new variables to be merged onto.}
 
-\item{newdata}{data.frame that contains new variables. All variables included in the dataset except for the variables asserted in \code{id_country} and \code{id_year} will be merged on to \code{basedata} automatically.}
+\item{newdata}{data.frame that contains new variables. All variables included in the dataset except for the variables asserted in \code{id_site} and \code{id_year} will be merged on to \code{basedata} automatically.}
 
-\item{id_year}{(Optional, Default = \code{NULL}) A year variable name included in \code{newdata}.If \code{NULL}, values in new variables will be merged to every year in `basedata`.}
+\item{id_site}{(Default = \code{NULL}) A site variable name included in \code{basedata} and \code{newdata}.}
 
-\item{id_country}{(Default = \code{NULL}) A country variable name included in \code{newdata}.}
-
-\item{iso3}{(Default = \code{FALSE}) Logical \code{TRUE}/\code{FALSE} on whether or not the \code{id_country} is an ISO3 country code. If \code{TRUE}, \code{newdata} is merged only using the iso3 code. If \code{FALSE}, then \code{newdata} is merged using exact match, followed by a fuzzy match using \code{fuzzyjoin::stringdist_join()}.}
+\item{id_year}{(Optional, Default = \code{NULL}) A year variable name included in \code{basedata} and \code{newdata}. If \code{NULL}, assumes \code{newdata} is cross-sectional.}
 
 \item{...}{Arguments passed onto \code{fuzzymatch::stringdist_join()}.}
 }
