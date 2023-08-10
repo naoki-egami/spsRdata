@@ -1,13 +1,13 @@
-#' SPS site selection data
-#' @name sps_data
+#' SPS country-level site selection data
+#' @name sps_country_data
 #' @docType data
 #' @format data
 #' @keywords datasets
 NULL
 
-#' Codebook for sps_data
+#' Codebook for sps_country_data
 #' @name codebook
 #' @docType data
 #' @format data
-#' @keywords codebook for sps_data
+#' @keywords codebook for sps_country_data
 NULL

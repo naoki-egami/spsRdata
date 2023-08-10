@@ -6,25 +6,25 @@
 \usage{
 merge_data(
   basedata,
-  newdata = NULL,
-  yearvar = NULL,
-  countryvar = NULL,
-  iso = FALSE,
+  newdata,
+  id_year = NULL,
+  id_country = NULL,
+  iso3 = FALSE,
   ...
 )
 }
 \arguments{
-\item{basedata}{Data frame for new variables to be merged onto. We recommend you use \code{sps_data}.}
+\item{basedata}{data.frame for new variables to be merged onto. We recommend you use \code{sps_data}.}
 
-\item{newdata}{Data frame that contains new variables. All variables included in the dataset except for the variables asserted in \code{countryvar} and \code{yearvar} will be merged on to \code{basedata} automatically.}
+\item{newdata}{data.frame that contains new variables. All variables included in the dataset except for the variables asserted in \code{id_country} and \code{id_year} will be merged on to \code{basedata} automatically.}
 
-\item{yearvar}{Year column name in \code{newdata}.}
+\item{id_year}{(Default = \code{NULL}) A year variable name included in \code{newdata}.}
 
-\item{countryvar}{Country column name in \code{newdata}.}
+\item{id_country}{(Default = \code{NULL}) A country variable name included in \code{newdata}.}
 
-\item{iso}{Whether or not the \code{countryvar} is an ISO3 code. If TRUE, the \code{newdata} is merged only using the iso3 code. If FALSE, the \code{newdata} is merged using exact match, followed by a fuzzy match using \code{fuzzyjoin} Default is FALSE.}
+\item{iso3}{(Default = \code{FALSE}) Whether or not the \code{id_country} is an ISO3 country code. If \code{TRUE}, \code{newdata} is merged only using the iso3 code. If \code{FALSE}, then \code{newdata} is merged using exact match, followed by a fuzzy match using \code{fuzzyjoin::stringdist_join()}.}
 
-\item{...}{Arguments passed onto \code{fuzzymatch::stringdist}}
+\item{...}{Arguments passed onto \code{fuzzymatch::stringdist_join()}.}
 }
 \value{
 A dataframe with new variables merged.

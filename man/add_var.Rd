@@ -7,12 +7,12 @@
 add_var(data, vars = NULL)
 }
 \arguments{
-\item{data}{Dataframe for new variables to be merged onto (we recommend you use \code{sps_data}). A dataset must have a column 'iso3' and 'year'.}
+\item{data}{data.frame where new variables should be merged onto (we recommend you use \code{sps_country_data}). A dataset must have a column 'iso3' and 'year'.}
 
-\item{vars}{A character vector with one or more variable names from V-Dem dataset or World Bank Indicators.}
+\item{vars}{(Default = \code{NULL}) A character vector with one or more variable names from V-Dem dataset or World Bank Indicators.}
 }
 \value{
-A dataframe with new variables merged on
+A data.frame with new variables merged onto \code{data}.
 }
 \description{
 Add Additional Covariates from V-Dem Dataset and/or World Bank API

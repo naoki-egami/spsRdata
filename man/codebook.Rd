@@ -3,13 +3,13 @@
 \docType{data}
 \name{codebook}
 \alias{codebook}
-\title{Codebook for sps_data}
+\title{Codebook for sps_country_data}
 \format{
 data
 }
 \description{
-Codebook for sps_data
+Codebook for sps_country_data
 }
 \keyword{codebook}
 \keyword{for}
-\keyword{sps_data}
+\keyword{sps_country_data}

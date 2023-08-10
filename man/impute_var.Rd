@@ -6,31 +6,34 @@
 \usage{
 impute_var(
   data,
-  countryvar = NULL,
-  yearvar = NULL,
-  imputevars = NULL,
-  method = "carryforward",
+  id_site = NULL,
+  id_year = NULL,
+  id_impute = NULL,
+  method = "miceranger",
+  n_impute = 5,
   carryforward_yrs = NULL,
   ...
 )
 }
 \arguments{
-\item{data}{Dataframe for new variables to be merged onto (we recommend you use \code{sps_data}).}
+\item{data}{data.frame}
 
-\item{countryvar}{Country column name in \code{data}. Default is "iso3".}
+\item{id_site}{A site-level variable name included in \code{data}.}
 
-\item{yearvar}{Year column name in \code{data}. Default is "year".}
+\item{id_year}{A year variable name included in \code{data}.}
 
-\item{imputevars}{A character vector with one or more variable names for which imputation is performed.}
+\item{id_impute}{(Default = \code{NULL}) Vector with one or more variable names for which imputation is performed. Imputes all variables in \code{data} except \code{id_site} and \code{id_year} if not specified.}
 
-\item{method}{Imputation method. Choose from "carryforward" (default), "amelia", and "miceranger".}
+\item{method}{(Optional. Default = "miceranger") Imputation method. Choose from "carryforward", "amelia", and "miceranger".}
 
-\item{carryforward_yrs}{Maximum number of years allowed to be carried forward. Used only when "carryforward" is selected for \code{method}. Default is NULL, which will impute values from the most recent years available.}
+\item{n_impute}{(Optional. Used only when "miceranger" or "amelia" is selected in \code{method}. Default = 5) The number of imputed datasets to create (equivalent of argument \code{m} in \code{amelia()} and \code{miceRanger()}).}
 
-\item{...}{Arguments passed onto \code{Amelia::amelia} or \code{miceRanger::miceRanger}.}
+\item{carryforward_yrs}{(Optional. Used only when "carryforward" is selected in \code{method}. Default = \code{NULL}) Maximum number of years allowed to be carried forward. If not specified, it will impute values from the most recent years available.}
+
+\item{...}{Arguments passed onto \code{Amelia::amelia()} or \code{miceRanger::miceRanger()}.}
 }
 \value{
-A dataframe with new variables merged on
+A dataframe with new variables merged onto the base dataset.
 }
 \description{
 Impute Missing Values

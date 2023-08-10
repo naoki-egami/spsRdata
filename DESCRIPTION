@@ -20,7 +20,6 @@ Imports:
     fuzzyjoin,
     Amelia,
     miceRanger,
-    ggplot2,
     Hmisc,
     stats,
     devtools
