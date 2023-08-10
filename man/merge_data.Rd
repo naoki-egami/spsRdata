@@ -18,11 +18,11 @@ merge_data(
 
 \item{newdata}{data.frame that contains new variables. All variables included in the dataset except for the variables asserted in \code{id_country} and \code{id_year} will be merged on to \code{basedata} automatically.}
 
-\item{id_year}{(Default = \code{NULL}) A year variable name included in \code{newdata}.}
+\item{id_year}{(Optional, Default = \code{NULL}) A year variable name included in \code{newdata}.If \code{NULL}, values in new variables will be merged to every year in `basedata`.}
 
 \item{id_country}{(Default = \code{NULL}) A country variable name included in \code{newdata}.}
 
-\item{iso3}{(Default = \code{FALSE}) Whether or not the \code{id_country} is an ISO3 country code. If \code{TRUE}, \code{newdata} is merged only using the iso3 code. If \code{FALSE}, then \code{newdata} is merged using exact match, followed by a fuzzy match using \code{fuzzyjoin::stringdist_join()}.}
+\item{iso3}{(Default = \code{FALSE}) Logical \code{TRUE}/\code{FALSE} on whether or not the \code{id_country} is an ISO3 country code. If \code{TRUE}, \code{newdata} is merged only using the iso3 code. If \code{FALSE}, then \code{newdata} is merged using exact match, followed by a fuzzy match using \code{fuzzyjoin::stringdist_join()}.}
 
 \item{...}{Arguments passed onto \code{fuzzymatch::stringdist_join()}.}
 }

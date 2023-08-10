@@ -1,9 +1,9 @@
 #' Impute Missing Values
 #' @param data data.frame
 #' @param id_site A site-level variable name included in \code{data}.
-#' @param id_year A year variable name included in \code{data}.
-#' @param id_impute (Default = \code{NULL}) Vector with one or more variable names for which imputation is performed. Imputes all variables in \code{data} except \code{id_site} and \code{id_year} if not specified.
-#' @param method (Optional. Default = "miceranger") Imputation method. Choose from "carryforward", "amelia", and "miceranger".
+#' @param id_year (Default = \code{NULL}). A year variable name included in \code{data}. If not specified, assumes the dataset is cross-sectional.
+#' @param id_impute (Default = \code{NULL}) Vector with one or more variable names for which imputation is performed. Imputes all variables that contain missing values in \code{data} except \code{id_site} and \code{id_year} if not specified.
+#' @param method (Optional. Default = "miceranger") Imputation method. Choose from "carryforward", "amelia", and "miceranger". "carryforward" is available only for time-series data.
 #' @param n_impute (Optional. Used only when "miceranger" or "amelia" is selected in \code{method}. Default = 5) The number of imputed datasets to create (equivalent of argument \code{m} in \code{amelia()} and \code{miceRanger()}).
 #' @param carryforward_yrs (Optional. Used only when "carryforward" is selected in \code{method}. Default = \code{NULL}) Maximum number of years allowed to be carried forward. If not specified, it will impute values from the most recent years available.
 #' @param ... Arguments passed onto \code{Amelia::amelia()} or \code{miceRanger::miceRanger()}.
@@ -18,12 +18,23 @@
 
 impute_var <- function(data, id_site = NULL, id_year = NULL, id_impute = NULL, method = 'miceranger', n_impute = 5, carryforward_yrs = NULL, ...){
 
-  if (is.null(id_site) | is.null(id_year)){
-    stop('Either id_site or id_year is unspecified.')
+  if (is.null(id_site)){
+    stop('id_site must be specified.')
+  }
+  if (is.null(id_year) & method == 'carryforward'){
+    stop('id_year must be specified for a carryforward method.')
   }
 
-  if (nrow(data[duplicated(data[,c(id_site, id_year)]),])>0){
+  if (is.null(id_year)){
+    warning('id_year unspecified. Assumes dataset is cross-sectional.')
+  }
+
+  if (is.null(id_year) & nrow(data[duplicated(data[,c(id_site, id_year)]),])>0){
     stop(paste0('Data is not unique by ', id_site, ' and ', id_year, '.'))
+  }
+
+  if (!is.null(id_year) & nrow(data[duplicated(data[,id_site]),])>0){
+    stop(paste0('Data is not unique by ', id_site, '.'))
   }
 
   if (is.null(id_impute)){
@@ -62,6 +73,7 @@ impute_var <- function(data, id_site = NULL, id_year = NULL, id_impute = NULL, m
                     by = c(id_site, id_year),
                     all.x = TRUE,
                     suffixes = c('', '.imputed'))
+
     for (v in c(id_impute, id_binary)){
       merged[[v]] <- ifelse(is.na(merged[[v]]), merged[[paste0(v, '.imputed')]], merged[[v]])
     }
@@ -71,6 +83,7 @@ impute_var <- function(data, id_site = NULL, id_year = NULL, id_impute = NULL, m
   # Amelia
   if (method == 'amelia'){
     ids <- setdiff(names(data[, sapply(data, class) == 'character']), c(id_site, id_impute))
+    ids <- c(ids, setdiff(names(data[vapply(data, function(x) length(unique(x)) == 1, logical(1L))]), c(id_site, id_impute)))
     imputed <- amelia(x = data[, setdiff(names(data), id_refcat)],
                       m = n_impute,
                       idvars = ids,

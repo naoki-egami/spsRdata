@@ -20,11 +20,11 @@ impute_var(
 
 \item{id_site}{A site-level variable name included in \code{data}.}
 
-\item{id_year}{A year variable name included in \code{data}.}
+\item{id_year}{(Default = \code{NULL}). A year variable name included in \code{data}. If not specified, assumes the dataset is cross-sectional.}
 
-\item{id_impute}{(Default = \code{NULL}) Vector with one or more variable names for which imputation is performed. Imputes all variables in \code{data} except \code{id_site} and \code{id_year} if not specified.}
+\item{id_impute}{(Default = \code{NULL}) Vector with one or more variable names for which imputation is performed. Imputes all variables that contain missing values in \code{data} except \code{id_site} and \code{id_year} if not specified.}
 
-\item{method}{(Optional. Default = "miceranger") Imputation method. Choose from "carryforward", "amelia", and "miceranger".}
+\item{method}{(Optional. Default = "miceranger") Imputation method. Choose from "carryforward", "amelia", and "miceranger". "carryforward" is available only for time-series data.}
 
 \item{n_impute}{(Optional. Used only when "miceranger" or "amelia" is selected in \code{method}. Default = 5) The number of imputed datasets to create (equivalent of argument \code{m} in \code{amelia()} and \code{miceRanger()}).}
 
