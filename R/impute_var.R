@@ -29,11 +29,11 @@ impute_var <- function(data, id_site = NULL, id_year = NULL, id_impute = NULL, m
     warning('id_year unspecified. Assumes dataset is cross-sectional.')
   }
 
-  if (is.null(id_year) & nrow(data[duplicated(data[,c(id_site, id_year)]),])>0){
+  if (!is.null(id_year) & nrow(data[duplicated(data[,c(id_site, id_year)]),])>0){
     stop(paste0('Data is not unique by ', id_site, ' and ', id_year, '.'))
   }
 
-  if (!is.null(id_year) & nrow(data[duplicated(data[,id_site]),])>0){
+  if (is.null(id_year) & nrow(data[duplicated(data[,id_site]),])>0){
     stop(paste0('Data is not unique by ', id_site, '.'))
   }
 
