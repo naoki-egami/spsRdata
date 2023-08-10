@@ -9,5 +9,12 @@ NULL
 #' @name codebook
 #' @docType data
 #' @format data
-#' @keywords codebook for sps_country_data
+#' @keywords datasets
+NULL
+
+#' European Social Survey data used as an example
+#' @name ess_data
+#' @docType data
+#' @format data
+#' @keywords datasets
 NULL
