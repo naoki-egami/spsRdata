@@ -6,7 +6,7 @@
 NULL
 
 #' Codebook for sps_country_data
-#' @name sps_country_codebook
+#' @name sps_country_data_full
 #' @docType data
 #' @format data
 #' @keywords datasets
