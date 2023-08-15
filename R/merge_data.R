@@ -14,7 +14,7 @@
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 
-merge_data <- function(data, newdata = NULL, id_site = NULL, id_year = NULL, ...){
+merge_data <- function(data, vars = NULL, newdata = NULL, id_site = NULL, id_year = NULL, ...){
 
   if (is.null(newdata)){
     print('newdata is unspecified. Merging variables listed in vars onto data.')
