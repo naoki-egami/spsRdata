@@ -6,5 +6,5 @@
 
 sps_country_data <- function(year = NULL){
   data('sps_country_data_full')
-  return(sps_country_data_full[sps_country_data$year %in% year,])
+  return(sps_country_data_full[which(sps_country_data_full$year %in% year),])
 }
