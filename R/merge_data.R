@@ -1,9 +1,9 @@
 #' Add new variables or merge external dataset
 #' @param data data.frame for new variables to be merged onto.
-#' @param newdata (Default = \code{NULL}) data.frame that contains new variables. All variables included in the dataset except for the variables asserted in \code{id_site} and \code{id_year} will be merged on to \code{basedata} automatically.
+#' @param newdata (Default = \code{NULL}) data.frame that contains new variables.
 #' @param vars (Default = \code{NULL}) A vector with one or more variable names that should be merged onto \code{data}. Must be specified if \code{newdata} is \code{NULL}. Use \code{search_var()} to search for new variables.
-#' @param id_site (Default = \code{NULL}) A site variable name included in \code{basedata} and \code{newdata}.
-#' @param id_year (Optional, Default = \code{NULL}) A year variable name included in \code{basedata} and \code{newdata}. If \code{NULL}, assumes \code{newdata} is cross-sectional.
+#' @param id_site (Default = \code{NULL}) A site variable name included in \code{data} and \code{newdata}.
+#' @param id_year (Optional, Default = \code{NULL}) A year variable name included in \code{data} and \code{newdata}. If \code{NULL}, assumes \code{newdata} is cross-sectional.
 #' @param ... Arguments passed onto \code{fuzzymatch::stringdist_join()}.
 #' @import fuzzyjoin
 #' @import vdemdata
@@ -50,8 +50,8 @@ merge_data <- function(data, vars = NULL, newdata = NULL, id_site = NULL, id_yea
     if (is.null(id_site)){
       stop('id_site must be specified.')
     }
-    if (!id_site %in% names(basedata)){
-      stop('id_site does not exist in basedata.')
+    if (!id_site %in% names(data)){
+      stop('id_site does not exist in data.')
     }
     if (!id_site %in% names(newdata)){
       stop('id_site does not exist in newdata.')
@@ -60,8 +60,8 @@ merge_data <- function(data, vars = NULL, newdata = NULL, id_site = NULL, id_yea
       warning('id_year unspecified. Assumes newdata is cross-sectional.')
     }
     if (!is.null(id_year)){
-      if (!id_year %in% names(basedata)){
-        stop('id_year variable does not exist in basedata.')
+      if (!id_year %in% names(data)){
+        stop('id_year variable does not exist in data.')
       }
       if (!id_year %in% names(newdata)){
         stop('id_year variable does not exist in newdata.')
@@ -74,7 +74,7 @@ merge_data <- function(data, vars = NULL, newdata = NULL, id_site = NULL, id_yea
     # if (iso3 == TRUE){
     #   xcol <- c(id_year, id_site)
     #   if (is.null(id_year)) xcol <- id_site
-    #   data <- merge(basedata,
+    #   data <- merge(data,
     #                 newdata,
     #                 by.x = xcol,
     #                 by.y = c(id_year, id_site),
@@ -83,7 +83,7 @@ merge_data <- function(data, vars = NULL, newdata = NULL, id_site = NULL, id_yea
     # else{
     # Try exact matching first
     newvars <- names(newdata)[which(!names(newdata) %in% c(id_year, id_site))]
-    base_unique <- data.frame(basedata[!duplicated(basedata[[id_site]]),id_site])
+    base_unique <- data.frame(data[!duplicated(data[[id_site]]),id_site])
     names(base_unique) <- 'sitevar'
     newdata$sitevar <- newdata[[id_site]]
 
@@ -113,16 +113,16 @@ merge_data <- function(data, vars = NULL, newdata = NULL, id_site = NULL, id_yea
     xcol <- c(id_year, id_site)
     if (is.null(id_year)) xcol <- id_site
 
-    # data0 <- merge(basedata, newdata[,c(id_site, id_year, newvars, 'merge')], by.x = xcol, by.y = c(id_year, id_site), all.x = TRUE)
+    # data0 <- merge(data, newdata[,c(id_site, id_year, newvars, 'merge')], by.x = xcol, by.y = c(id_year, id_site), all.x = TRUE)
     # data1 <- merge(data0, fuzzy, by.x = xcol, by.y = xcol, all.x = TRUE, suffixes = c('', '.f'))
-    data <- merge(basedata, fuzzy, by.x = xcol, by.y = xcol, all.x = TRUE, suffixes = c('', '.f'))
+    data <- merge(data, fuzzy, by.x = xcol, by.y = xcol, all.x = TRUE, suffixes = c('', '.f'))
     # data1$match <- ifelse(is.na(data1$merge), data1$merge.f, data1$merge)
     # data1$cname_used <- ifelse(data1$match == 'exact', data1$country, data1$cname_used)
     # for (i in newvars){
     #   data[[i]] <- ifelse(is.na(data$match), NA, ifelse(data$match == 'exact', data[[i]], data[[paste0(i, '.f')]]))
     # }
-    # data <- data1[,c(names(basedata), newvars, 'match', 'cname_used')]
-    # data <- data[, c(names(basedata), newvars)]
+    # data <- data1[,c(names(data), newvars, 'match', 'cname_used')]
+    # data <- data[, c(names(data), newvars)]
     # }
   }
 
