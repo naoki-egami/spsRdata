@@ -2,26 +2,28 @@
 % Please edit documentation in R/merge_data.R
 \name{merge_data}
 \alias{merge_data}
-\title{Merge external dataset}
+\title{Add new variables or merge external dataset}
 \usage{
-merge_data(basedata, newdata, id_site = NULL, id_year = NULL, ...)
+merge_data(data, newdata = NULL, id_site = NULL, id_year = NULL, ...)
 }
 \arguments{
-\item{basedata}{data.frame for new variables to be merged onto.}
+\item{data}{data.frame for new variables to be merged onto.}
 
-\item{newdata}{data.frame that contains new variables. All variables included in the dataset except for the variables asserted in \code{id_site} and \code{id_year} will be merged on to \code{basedata} automatically.}
+\item{newdata}{(Default = \code{NULL}) data.frame that contains new variables. All variables included in the dataset except for the variables asserted in \code{id_site} and \code{id_year} will be merged on to \code{basedata} automatically.}
 
 \item{id_site}{(Default = \code{NULL}) A site variable name included in \code{basedata} and \code{newdata}.}
 
 \item{id_year}{(Optional, Default = \code{NULL}) A year variable name included in \code{basedata} and \code{newdata}. If \code{NULL}, assumes \code{newdata} is cross-sectional.}
 
 \item{...}{Arguments passed onto \code{fuzzymatch::stringdist_join()}.}
+
+\item{vars}{(Default = \code{NULL}) A vector with one or more variable names that should be merged onto \code{data}. Must be specified if \code{newdata} is \code{NULL}. Use \code{search_var()} to search for new variables.}
 }
 \value{
 A dataframe with new variables merged.
 }
 \description{
-Merge external dataset
+Add new variables or merge external dataset
 }
 \references{
 Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
