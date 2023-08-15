@@ -1,55 +1,86 @@
-#' Merge external dataset
-#' @param basedata data.frame for new variables to be merged onto.
-#' @param newdata data.frame that contains new variables. All variables included in the dataset except for the variables asserted in \code{id_site} and \code{id_year} will be merged on to \code{basedata} automatically.
+#' Add new variables or merge external dataset
+#' @param data data.frame for new variables to be merged onto.
+#' @param newdata (Default = \code{NULL}) data.frame that contains new variables. All variables included in the dataset except for the variables asserted in \code{id_site} and \code{id_year} will be merged on to \code{basedata} automatically.
+#' @param vars (Default = \code{NULL}) A vector with one or more variable names that should be merged onto \code{data}. Must be specified if \code{newdata} is \code{NULL}. Use \code{search_var()} to search for new variables.
 #' @param id_site (Default = \code{NULL}) A site variable name included in \code{basedata} and \code{newdata}.
 #' @param id_year (Optional, Default = \code{NULL}) A year variable name included in \code{basedata} and \code{newdata}. If \code{NULL}, assumes \code{newdata} is cross-sectional.
 #' @param ... Arguments passed onto \code{fuzzymatch::stringdist_join()}.
 #' @import fuzzyjoin
+#' @import vdemdata
+#' @import wbstats
+#' @import devtools
 #' @importFrom dplyr group_by_at slice_min
 #' @return A dataframe with new variables merged.
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 
-merge_data <- function(basedata, newdata, id_site = NULL, id_year = NULL, ...){
-  if (is.null(id_site)){
-    stop('id_site must be specified.')
-  }
+merge_data <- function(data, newdata = NULL, id_site = NULL, id_year = NULL, ...){
 
-  if (!id_site %in% names(basedata)){
-    stop('id_site does not exist in basedata.')
-  }
-
-  if (!id_site %in% names(newdata)){
-    stop('id_site does not exist in newdata.')
-  }
-
-  if (is.null(id_year)){
-    warning('id_year unspecified. Assumes newdata is cross-sectional.')
-  }
-
-  if (!is.null(id_year)){
-    if (!id_year %in% names(basedata)){
-      stop('id_year variable does not exist in basedata.')
+  if (is.null(newdata)){
+    print('newdata is unspecified. Merging variables listed in vars onto data.')
+    if (is.null(vars)){
+      stop('Variable names must be specified in vars argument. Use search_var() to search for variables to be included.')
     }
-    if (!id_year %in% names(newdata)){
-      stop('id_year variable does not exist in newdata.')
+    if (!is.null(vars)){
+      for (i in vars){
+        if (i %in% names(data)){
+          print(paste('Variable', i, 'already exists and will not be merged.'))
+        }
+        else if (i %in% names(vdemdata::vdem)){
+          print(paste('Merging', i, 'from V-Dem'))
+          data <- merge(data,
+                        vdemdata::vdem[,c('country_text_id', 'year', i)],
+                        by.x = c('iso3', 'year'),
+                        by.y = c('country_text_id', 'year'),
+                        all.x = TRUE, sort = FALSE)
+        }
+        else{
+          print(paste('Merging', i, 'from World Bank'))
+          wb <- wbstats::wb_data(indicator = i, start_date = 2010, end_date = 2022)[,c('iso3c', 'date', i)]
+          data <- merge(data,
+                        wb,
+                        by.x = c('iso3', 'year'),
+                        by.y = c('iso3c', 'date'),
+                        all.x = TRUE, sort = FALSE)
+        }
+      }
     }
   }
+  if (!is.null(newdata)){
+    if (is.null(id_site)){
+      stop('id_site must be specified.')
+    }
+    if (!id_site %in% names(basedata)){
+      stop('id_site does not exist in basedata.')
+    }
+    if (!id_site %in% names(newdata)){
+      stop('id_site does not exist in newdata.')
+    }
+    if (is.null(id_year)){
+      warning('id_year unspecified. Assumes newdata is cross-sectional.')
+    }
+    if (!is.null(id_year)){
+      if (!id_year %in% names(basedata)){
+        stop('id_year variable does not exist in basedata.')
+      }
+      if (!id_year %in% names(newdata)){
+        stop('id_year variable does not exist in newdata.')
+      }
+    }
+    if (nrow(newdata[duplicated(newdata[,c(id_year, id_site)]),])>0){
+      stop('newdata is not unique by id_site (and id_year). Check the data before merging.')
+    }
 
-  if (nrow(newdata[duplicated(newdata[,c(id_year, id_site)]),])>0){
-    stop('newdata is not unique by id_site (and id_year). Check the data before merging.')
-  }
-
-  # if (iso3 == TRUE){
-  #   xcol <- c(id_year, id_site)
-  #   if (is.null(id_year)) xcol <- id_site
-  #   data <- merge(basedata,
-  #                 newdata,
-  #                 by.x = xcol,
-  #                 by.y = c(id_year, id_site),
-  #                 all.x = TRUE)
-  # }
-  # else{
+    # if (iso3 == TRUE){
+    #   xcol <- c(id_year, id_site)
+    #   if (is.null(id_year)) xcol <- id_site
+    #   data <- merge(basedata,
+    #                 newdata,
+    #                 by.x = xcol,
+    #                 by.y = c(id_year, id_site),
+    #                 all.x = TRUE)
+    # }
+    # else{
     # Try exact matching first
     newvars <- names(newdata)[which(!names(newdata) %in% c(id_year, id_site))]
     base_unique <- data.frame(basedata[!duplicated(basedata[[id_site]]),id_site])
@@ -92,6 +123,8 @@ merge_data <- function(basedata, newdata, id_site = NULL, id_year = NULL, ...){
     # }
     # data <- data1[,c(names(basedata), newvars, 'match', 'cname_used')]
     # data <- data[, c(names(basedata), newvars)]
-  # }
+    # }
+  }
+
   return(data)
 }
