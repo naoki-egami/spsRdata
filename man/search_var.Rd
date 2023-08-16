@@ -13,8 +13,10 @@ search_var(keyword = NULL)
 A dataframe with list of variable names, descriptions, variable source, and coverage.
 }
 \description{
-Search for Additional Covariates from V-Dem Dataset and World Bank API
+Allows users to search for other country-level variables in V-Dem and World Bank using keywords.
 }
 \references{
 Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
+Michael Coppedge et al. (2023). “V-Dem Dataset V13.” Varieties of Democracy (V-Dem) Project. \url{https://doi.org/10.23696/VDEMDS23}.
+World Bank. (2023). World Development Indicators. \url{https://databank.worldbank.org/source/world-development-indicators}.
 }

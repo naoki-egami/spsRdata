@@ -10,4 +10,7 @@ data
 \description{
 European Social Survey data used as an example
 }
+\references{
+ESS Round 6: European Social Survey Round 6 Data (2012). Data file edition 2.4. Sikt - Norwegian Agency for Shared Services in Education and Research, Norway – Data Archive and distributor of ESS data for ESS ERIC. doi:10.21338/NSD-ESS6-2012.
+}
 \keyword{datasets}

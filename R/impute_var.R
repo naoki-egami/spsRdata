@@ -1,4 +1,10 @@
 #' Impute Missing Values
+#'
+#' Imputes missing values in both numeric and character variables.
+#' Character variables are converted into dummies for each unique values prior to imputation.
+#' The dataset can be either cross-sectional or time-series cross-sectional.
+#' Users may use this function to impute missing values on the site-level variables that they want to diversify prior to subsetting the data to the target population.
+#'
 #' @param data data.frame
 #' @param id_site A site-level variable name included in \code{data}.
 #' @param id_year (Default = \code{NULL}). A year variable name included in \code{data}. If not specified, assumes the dataset is cross-sectional.

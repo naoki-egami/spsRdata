@@ -8,6 +8,7 @@
 data
 }
 \description{
-SPS country-level site selection data
+A country-level data set comprised of 21 variables for 179 countries between 2010 and 2022.
+It contains a wide range of variables commonly used in the social sciences: they represent political, economic, and social characteristics of countries.
 }
 \keyword{datasets}

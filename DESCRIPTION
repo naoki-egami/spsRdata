@@ -6,7 +6,7 @@ Authors@R: c(
     person("Naoki", "Egami", email = "naoki.egami5@gmail.com", role = c("cre", "aut")),
     person("Diana", "Da In Lee", email = "dl2860@columbia.edu", role = "aut"))
 Maintainer: Naoki Egami <naoki.egami@columbia.edu>
-Description: R package sps implements the SPS algorithm for site selection and the SPS estimator for estimating the average-site average treatment effects. Please read Egami and Lee (2023+) (https://naokiegami.com/paper/sps.pdf).
+Description: R package spsRdata is complementary to the R package spsR. The purpose of spsRdata is to facilitate data collection for multi-country studies. Users can supply data they prepared on using spsRdata to sps() for site selection. Users can start with the default data set sps_country_data that contains a wide range of commonly-used country-level variables in the social sciences. spsRdata also offers several functions to merge additional country-level variables from well-known data sets (e.g., V-Dem and World Bank) as well as from any external data users want to add. While R package spsRdata currently only focuses on country-level data collection, we emphasize that R package sps and the corresponding SPS algorithm can be applied to any type of study site (e.g., states, districts, villages, or schools). Please read Egami and Lee (2023+) (https://naokiegami.com/paper/sps.pdf).
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
@@ -27,3 +27,7 @@ Remotes:
     vdeminstitute/vdemdata
 RoxygenNote: 7.2.3
 URL: http://naokiegami.com/spsRdata/
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

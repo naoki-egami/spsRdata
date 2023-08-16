@@ -36,7 +36,10 @@ impute_var(
 A dataframe with new variables merged onto the base dataset.
 }
 \description{
-Impute Missing Values
+Imputes missing values in both numeric and character variables.
+Character variables are converted into dummies for each unique values prior to imputation.
+The dataset can be either cross-sectional or time-series cross-sectional.
+Users may use this function to impute missing values on the site-level variables that they want to diversify prior to subsetting the data to the target population.
 }
 \references{
 Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.

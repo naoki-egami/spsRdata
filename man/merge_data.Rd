@@ -2,7 +2,7 @@
 % Please edit documentation in R/merge_data.R
 \name{merge_data}
 \alias{merge_data}
-\title{Add new variables or merge external dataset}
+\title{Merge new variables from V-Dem/World Bank or external dataset}
 \usage{
 merge_data(
   data,
@@ -30,8 +30,12 @@ merge_data(
 A dataframe with new variables merged.
 }
 \description{
-Add new variables or merge external dataset
+Allows users to either add new variable(s) from V-Dem or World Bank or merge their own data set to the baseline data set.
+To add variables from V-Dem or World Bank, \code{data}, \code{newdata} and \code{vars} must be supplied.
+To merge external data set, \code{data}, \code{newdata}, and \code{id_site} must be supplied.
 }
 \references{
 Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
+Michael Coppedge et al. (2023). “V-Dem Dataset V13.” Varieties of Democracy (V-Dem) Project. \url{https://doi.org/10.23696/VDEMDS23}.
+World Bank. (2023). World Development Indicators. \url{https://databank.worldbank.org/source/world-development-indicators}.
 }

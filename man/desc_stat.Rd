@@ -18,7 +18,8 @@ desc_stat(data)
  }
 }
 \description{
-Provide useful summary statistic of selected variables
+Returns simple descriptive statistics and number of missing entries in each year in the data set.
+Character and factor variables are automatically binarized to obtain descriptive statistics.
 }
 \references{
 Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.

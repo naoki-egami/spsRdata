@@ -1,4 +1,8 @@
 #' Provide useful summary statistic of selected variables
+#'
+#' Returns simple descriptive statistics and number of missing entries in each year in the data set.
+#' Character and factor variables are automatically binarized to obtain descriptive statistics.
+#'
 #' @param data data.frame to perform summary statistics.
 #' @importFrom tidyr pivot_wider
 #' @importFrom Hmisc rcorr
