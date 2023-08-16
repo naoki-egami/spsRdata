@@ -71,16 +71,6 @@ merge_data <- function(data, vars = NULL, newdata = NULL, id_site = NULL, id_yea
       stop('newdata is not unique by id_site (and id_year). Check the data before merging.')
     }
 
-    # if (iso3 == TRUE){
-    #   xcol <- c(id_year, id_site)
-    #   if (is.null(id_year)) xcol <- id_site
-    #   data <- merge(data,
-    #                 newdata,
-    #                 by.x = xcol,
-    #                 by.y = c(id_year, id_site),
-    #                 all.x = TRUE)
-    # }
-    # else{
     # Try exact matching first
     newvars <- names(newdata)[which(!names(newdata) %in% c(id_year, id_site))]
     base_unique <- data.frame(data[!duplicated(data[[id_site]]),id_site])
@@ -97,33 +87,23 @@ merge_data <- function(data, vars = NULL, newdata = NULL, id_site = NULL, id_yea
 
     fuzzy <- dplyr::group_by_at(fuzzy, c('sitevar.y', id_year))
     fuzzy <- dplyr::slice_min(fuzzy, order_by = .data[['distance']], n = 1, with_ties = FALSE)
-    if (max(fuzzy$distance)>0){
-      warning(paste('\nFollowing sites are matched using fuzzyjoin:\n',
-                    paste(paste(fuzzy$sitevar.y[fuzzy$distance>0], '=>', fuzzy$sitevar.x[fuzzy$distance>0]), collapse = '\n '),
-                    '\nPlease review and if necessary, recode the site names in your dataset. For a country-level dataset, consider supplying ISO3 code instead.'))
-    }
-    # fuzzy <- fuzzy[, c('iso3', 'sitevar.x', id_site, id_year, newvars)]
-    # names(fuzzy) <- c('iso3', 'country', 'cname_used', id_year, newvars)
-    fuzzy <- fuzzy[, c('sitevar.x', id_year, newvars)]
-    names(fuzzy) <- c(id_site, id_year, newvars)
-
-    # fuzzy$merge  <- 'fuzzy'
-    # newdata$merge <- 'exact'
 
     xcol <- c(id_year, id_site)
     if (is.null(id_year)) xcol <- id_site
 
-    # data0 <- merge(data, newdata[,c(id_site, id_year, newvars, 'merge')], by.x = xcol, by.y = c(id_year, id_site), all.x = TRUE)
-    # data1 <- merge(data0, fuzzy, by.x = xcol, by.y = xcol, all.x = TRUE, suffixes = c('', '.f'))
-    data <- merge(data, fuzzy, by.x = xcol, by.y = xcol, all.x = TRUE, suffixes = c('', '.f'))
-    # data1$match <- ifelse(is.na(data1$merge), data1$merge.f, data1$merge)
-    # data1$cname_used <- ifelse(data1$match == 'exact', data1$country, data1$cname_used)
-    # for (i in newvars){
-    #   data[[i]] <- ifelse(is.na(data$match), NA, ifelse(data$match == 'exact', data[[i]], data[[paste0(i, '.f')]]))
-    # }
-    # data <- data1[,c(names(data), newvars, 'match', 'cname_used')]
-    # data <- data[, c(names(data), newvars)]
-    # }
+    # iso3 code
+    if (length(unique(nchar(fuzzy$sitevar.x)==3))==1 & TRUE %in% unique(nchar(fuzzy$sitevar.x)==3)){
+      fuzzy <- fuzzy[fuzzy$distance == 0, ]
+      }
+    else if (max(fuzzy$distance)>0){
+        warning(paste('\nFollowing sites are matched using fuzzyjoin:\n',
+                      paste(paste(fuzzy$sitevar.y[fuzzy$distance>0], '=>', fuzzy$sitevar.x[fuzzy$distance>0]), collapse = '\n '),
+                      '\nPlease review and if necessary, recode the site names in your dataset. For a country-level dataset, consider supplying ISO3 code instead.'))
+      }
+
+    fuzzy <- fuzzy[, c('sitevar.x', id_year, newvars)]
+    names(fuzzy) <- c(id_site, id_year, newvars)
+    data <- merge(data, fuzzy, by.x = xcol, by.y = xcol, all.x = TRUE, suffixes = c('', '.new'))
   }
 
   return(data)
