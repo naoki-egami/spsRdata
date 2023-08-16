@@ -3,11 +3,11 @@
 \docType{data}
 \name{sps_country_codebook}
 \alias{sps_country_codebook}
-\title{Codebook for sps_country_data_full}
+\title{Codebook for sps_country_data}
 \format{
 data
 }
 \description{
-Codebook for sps_country_data_full
+Codebook for sps_country_data
 }
 \keyword{datasets}
