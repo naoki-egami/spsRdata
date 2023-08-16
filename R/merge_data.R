@@ -57,7 +57,7 @@ merge_data <- function(data, vars = NULL, newdata = NULL, id_site = NULL, id_yea
       stop('id_site does not exist in newdata.')
     }
     if (is.null(id_year)){
-      warning('id_year unspecified. Assumes newdata is cross-sectional.')
+      print('id_year unspecified. Assumes newdata is cross-sectional.')
     }
     if (!is.null(id_year)){
       if (!id_year %in% names(data)){
