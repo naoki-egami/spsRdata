@@ -38,16 +38,25 @@ desc_stat <- function(data){
       max   <- max(data[[i]],  na.rm = T)
     }
     # by-year missing values
-    miss <- NULL
-    for (y in unique(na.omit(data$year))){
-      miss <- rbind(miss, data.frame(year = y, nmiss = sum(is.na(data[[i]][data$year == y]))))
+    if ('year' %in% names(data)){
+      miss <- NULL
+      for (y in unique(na.omit(data$year))){
+        miss <- rbind(miss, data.frame(year = y, nmiss = sum(is.na(data[[i]][data$year == y]))))
+      }
+      miss <- tidyr::pivot_wider(miss, names_from = 'year', values_from = 'nmiss', names_prefix = ("nmiss:"))
+      df_desc <- rbind(df_desc,
+                       cbind(data.frame(variable = i,
+                                        mean = avg, stdev = sd,
+                                        min = min, p10 = qtile[1], p25 = qtile[2], p50 = qtile[3], p75 = qtile[4], p90 = qtile[5], max = max,
+                                        n = nrow(data), nmiss_total = sum(is.na(data[[i]]))), miss))
     }
-    miss <- tidyr::pivot_wider(miss, names_from = 'year', values_from = 'nmiss', names_prefix = ("nmiss:"))
-    df_desc <- rbind(df_desc,
-                         cbind(data.frame(variable = i,
-                                          mean = avg, stdev = sd,
-                                          min = min, p10 = qtile[1], p25 = qtile[2], p50 = qtile[3], p75 = qtile[4], p90 = qtile[5], max = max,
-                                          n = nrow(data), nmiss_total = sum(is.na(data[[i]]))), miss))
+    else{
+      df_desc <- rbind(df_desc,
+                       data.frame(variable = i,
+                                  mean = avg, stdev = sd,
+                                  min = min, p10 = qtile[1], p25 = qtile[2], p50 = qtile[3], p75 = qtile[4], p90 = qtile[5], max = max,
+                                  n = nrow(data), nmiss_total = sum(is.na(data[[i]]))))
+    }
   }
   row.names(df_desc) <- NULL
 
