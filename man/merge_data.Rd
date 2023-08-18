@@ -35,7 +35,7 @@ To add variables from V-Dem or World Bank, \code{data}, \code{newdata} and \code
 To merge external data set, \code{data}, \code{newdata}, and \code{id_site} must be supplied.
 }
 \references{
-Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
-Michael Coppedge et al. (2023). “V-Dem Dataset V13.” Varieties of Democracy (V-Dem) Project. \url{https://doi.org/10.23696/VDEMDS23}.
+Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}. \cr
+Michael Coppedge et al. (2023). “V-Dem Dataset V13.” Varieties of Democracy (V-Dem) Project. \url{https://doi.org/10.23696/VDEMDS23}. \cr
 World Bank. (2023). World Development Indicators. \url{https://databank.worldbank.org/source/world-development-indicators}.
 }
