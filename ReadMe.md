@@ -2,17 +2,14 @@
 
 **Description:**
 
-R package `spsRdata`
+R package `spsRdata` is a companion R package for R package `spsR`.
+Please check the website of `spsR` package
+(<http://naokiegami.com/spsR/>).
 
 **Authors:**
 
--   [Naoki Egami](https://naokiegami.com) (Maintainer)
--   [Diana Da In Lee](https://www.dianadainlee.com)
-
-**Reference:**
-
--   Egami and Lee. (2023+). Designing Multi-Context Studies for External
-    Validity: Site Selection via Synthetic Purposive Sampling.
+-   [Naoki Egami](https://naokiegami.com)
+-   [Diana Da In Lee](https://www.dianadainlee.com) (Maintainer)
 
 ### Installation Instructions
 
@@ -21,7 +18,7 @@ package. First you have to install `devtools` using the following code.
 Note that you only have to do this once:
 
 ``` r
-if(!require(devtools)) install.packages("spsRdata")
+if(!require(devtools)) install.packages("devtools")
 ```
 
 Then, load `devtools` and use the function `install_github()` to install
