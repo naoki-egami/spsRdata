@@ -6,29 +6,26 @@
 \usage{
 impute_var(
   data,
-  id_site = NULL,
-  id_year = NULL,
-  id_impute = NULL,
-  method = "miceranger",
+  id_unit = NULL,
+  id_time = NULL,
+  var_impute = NULL,
+  method = "amelia",
   n_impute = 5,
-  carryforward_yrs = NULL,
   ...
 )
 }
 \arguments{
 \item{data}{data.frame}
 
-\item{id_site}{A site-level variable name included in \code{data}.}
+\item{id_unit}{A site-level variable name included in \code{data}.}
 
-\item{id_year}{(Default = \code{NULL}). A year variable name included in \code{data}. If not specified, assumes the dataset is cross-sectional.}
+\item{id_time}{(Default = \code{NULL}). A year variable name included in \code{data}. If not specified, assumes the dataset is cross-sectional.}
 
-\item{id_impute}{(Default = \code{NULL}) Vector with one or more variable names for which imputation is performed. Imputes all variables that contain missing values in \code{data} except \code{id_site} and \code{id_year} if not specified.}
+\item{var_impute}{(Default = \code{NULL}) Vector with one or more variable names for which imputation is performed. Imputes all variables that contain missing values in \code{data} except \code{id_unit} and \code{id_time} if not specified.}
 
-\item{method}{(Optional. Default = "miceranger") Imputation method. Choose from "carryforward", "amelia", and "miceranger". "carryforward" is available only for time-series data.}
+\item{method}{(Optional. Default = "miceranger") Imputation method. Choose from "amelia", and "miceranger".}
 
-\item{n_impute}{(Optional. Used only when "miceranger" or "amelia" is selected in \code{method}. Default = 5) The number of imputed datasets to create (equivalent of argument \code{m} in \code{amelia()} and \code{miceRanger()}).}
-
-\item{carryforward_yrs}{(Optional. Used only when "carryforward" is selected in \code{method}. Default = \code{NULL}) Maximum number of years allowed to be carried forward. If not specified, it will impute values from the most recent years available.}
+\item{n_impute}{(Optional. Default = 5) The number of imputed datasets to create (equivalent of argument \code{m} in \code{amelia()} and \code{miceRanger()}).}
 
 \item{...}{Arguments passed onto \code{Amelia::amelia()} or \code{miceRanger::miceRanger()}.}
 }
