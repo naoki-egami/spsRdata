@@ -19,11 +19,6 @@
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 
-data = sps_country_data[sps_country_data$year == 2018,c('iso3','AG.LND.TOTL.K2','e_p_polity', 'subregion')]
-id_unit <- 'iso3'
-id_time = NULL
-var_impute = NULL
-
 impute_var <- function(data, id_unit = NULL, id_time = NULL, var_impute = NULL, method = 'amelia', n_impute = 5, ...){
 
   if (is.null(id_unit)){
