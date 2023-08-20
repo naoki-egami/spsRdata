@@ -14,7 +14,7 @@
 #' @import vdemdata
 #' @import wbstats
 #' @import devtools
-#' @importFrom dplyr group_by_at slice_min
+#' @import dplyr
 #' @return A dataframe with new variables merged.
 #' @references
 #' Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}. \cr

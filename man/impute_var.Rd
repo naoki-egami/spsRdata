@@ -9,21 +9,24 @@ impute_var(
   id_unit = NULL,
   id_time = NULL,
   var_impute = NULL,
+  var_predictor = NULL,
   method = "amelia",
   n_impute = 5,
   ...
 )
 }
 \arguments{
-\item{data}{data.frame}
+\item{data}{A data.frame containing variables to impute.}
 
-\item{id_unit}{A site-level variable name included in \code{data}.}
+\item{id_unit}{A unique identifier for sites. A column name in \code{data}.}
 
-\item{id_time}{(Default = \code{NULL}). A year variable name included in \code{data}. If not specified, assumes the dataset is cross-sectional.}
+\item{id_time}{(Default = \code{NULL}) A unique identifier for time index. A column name in \code{data}. If unspecified, it assumes \code{data} is cross-sectional.}
 
-\item{var_impute}{(Default = \code{NULL}) Vector with one or more variable names for which imputation is performed. Imputes all variables that contain missing values in \code{data} except \code{id_unit} and \code{id_time} if not specified.}
+\item{var_impute}{(Default = \code{NULL}) A vector with one or more variable names for which imputation is performed. Imputes all variables that contain missing values in \code{data} except \code{id_unit} and \code{id_time} if not specified.}
 
-\item{method}{(Optional. Default = "miceranger") Imputation method. Choose from "amelia", and "miceranger".}
+\item{var_predictor}{(Default = \code{NULL}) A vector with one or more variable names that we use as predictors to impute variables in \code{var_impute}. If \code{NULL}, the function uses all variables in \code{data} except for variables in \code{var_impute}.}
+
+\item{method}{(Optional. Default = "amelia") Imputation method. Choose from "amelia", and "miceranger".}
 
 \item{n_impute}{(Optional. Default = 5) The number of imputed datasets to create (equivalent of argument \code{m} in \code{amelia()} and \code{miceRanger()}).}
 
