@@ -13,7 +13,7 @@
 #' World Bank. (2023). World Development Indicators. \url{https://databank.worldbank.org/source/world-development-indicators}.
 #' @export
 
-search_var <- function(keyword = NULL){
+search_sps_data <- function(keyword = NULL){
 
   vdem <- try(find_var(keyword)[,c('tag', 'name', 'clarification', 'years')])
   names(vdem) <- c('Variable', 'Name', 'Description', 'Coverage')
@@ -22,7 +22,7 @@ search_var <- function(keyword = NULL){
   names(wb) <- c('Variable', 'Name', 'Description')
 
   if (nrow(vdem) == 0 & nrow(wb) == 0){
-    stop(paste0('No results based on a keyword', keyword))
+    stop(paste0('No results based on a keyword ', keyword))
   }
 
   else{

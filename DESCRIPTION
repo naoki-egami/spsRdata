@@ -20,7 +20,6 @@ Imports:
     fuzzyjoin,
     Amelia,
     miceRanger,
-    Hmisc,
     stats,
     devtools
 Remotes: 

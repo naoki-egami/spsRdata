@@ -4,27 +4,40 @@
 #' Character and factor variables are automatically binarized to obtain descriptive statistics.
 #'
 #' @param data data.frame to perform summary statistics.
+#' @param id_time (Default = \code{NULL}) A column name indicating time (e.g., year) in \code{data}. If unspecified, missing values will counted for the entire data set.
 #' @importFrom tidyr pivot_wider
-#' @importFrom Hmisc rcorr
 #' @importFrom stats quantile na.omit
-#' @return \code{desc_stat} returns a list containing the following elements:
+#' @return \code{check_missing} returns a list containing the following elements:
 #'  \itemize{
 #'    \item \code{desc}: Data frame containing descriptive statistics including mean, standard deviation, minimum, maximum, 10, 25, 50, 75, and 90th percentiles for all variables.
-#'    \item \code{miss}: Data frame with total number of missing observations (i.e., countries) for each year.
-#'    \item \code{corr}: Correlation matrix of all variables.
+#'    \item \code{miss}: Data frame with total number of missing observations (i.e., countries) for each values in \code{id_time}.
 #'  }
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 
-desc_stat <- function(data){
-  # descriptive stat
-  df_desc <- NULL
-  vars    <- names(data)[which(!(names(data) %in% c("country", "iso3", "region", "year", "match", "lang", "cname_used")))]
+check_missing <- function(data, id_time = NULL){
 
+  if (class(data) != 'data.frame'){
+    stop('`data` must be a data.frame.')
+  }
+
+  if (!is.null(id_time)){
+    if (!(id_time %in% names(data))){
+    stop(print(paste0("Variable `", id_time, "' does not exist in `data`.")))
+    }
+  }
+
+  df_desc <- NULL
+  vars    <- names(data)
+  remove  <- c()
   # dummify character/factor variables
   for (i in vars){
     if (is.character(data[[i]])|is.factor(data[[i]])){
       vars <- vars[vars != i]
+      if (length(unique(na.omit(data[[i]]))) > 10){
+        vars <- vars[vars != i]
+        remove <- c(remove, i)
+      }
       for (j in unique(na.omit(data[[i]]))){
         data[[paste0(i, ":", j)]] <- ifelse(is.na(data[[i]]), NA, as.numeric(as.character(data[[i]]) == j))
         vars <- c(vars, paste0(i, ":", j))
@@ -42,32 +55,44 @@ desc_stat <- function(data){
       max   <- max(data[[i]],  na.rm = T)
     }
     # by-year missing values
-    if ('year' %in% names(data)){
+    if (!is.null(id_time)){
       miss <- NULL
       for (y in unique(na.omit(data$year))){
         miss <- rbind(miss, data.frame(year = y, nmiss = sum(is.na(data[[i]][data$year == y]))))
       }
-      miss <- tidyr::pivot_wider(miss, names_from = 'year', values_from = 'nmiss', names_prefix = ("nmiss:"))
+      miss <- tidyr::pivot_wider(miss, names_from = 'year', values_from = 'nmiss', names_prefix = ("nmiss."))
       df_desc <- rbind(df_desc,
                        cbind(data.frame(variable = i,
                                         mean = avg, stdev = sd,
                                         min = min, p10 = qtile[1], p25 = qtile[2], p50 = qtile[3], p75 = qtile[4], p90 = qtile[5], max = max,
-                                        n = nrow(data), nmiss_total = sum(is.na(data[[i]]))), miss))
+                                        n = nrow(data), `nmiss.total` = sum(is.na(data[[i]]))), miss))
     }
     else{
       df_desc <- rbind(df_desc,
                        data.frame(variable = i,
                                   mean = avg, stdev = sd,
                                   min = min, p10 = qtile[1], p25 = qtile[2], p50 = qtile[3], p75 = qtile[4], p90 = qtile[5], max = max,
-                                  n = nrow(data), nmiss_total = sum(is.na(data[[i]]))))
+                                  n = nrow(data), `nmiss.total` = sum(is.na(data[[i]]))))
     }
   }
   row.names(df_desc) <- NULL
 
-  # correlation check
-  cor <- Hmisc::rcorr(as.matrix(data[,vars]))
+  cat("\n")
+  cat("-------------------------\n")
+  cat(" Descriptive Summary\n")
+  cat("-------------------------\n\n")
+  print(df_desc[, 1:(which(names(df_desc) == "n"))])
+  cat("\n\n")
+  cat("-------------------------\n")
+  cat(" Missing Values\n")
+  cat("-------------------------\n\n")
+  print(df_desc[, c(1, which(names(df_desc) == "nmiss.total"):ncol(df_desc))])
+  cat("\n\n")
 
-  return(list(desc = df_desc[, 1:(which(names(df_desc) == "nmiss_total"))],
-              miss = df_desc[, c(1, which(names(df_desc) == "nmiss_total"):ncol(df_desc))],
-              corr = cor$r))
+  cat("Following character variable(s) has too many unique values and was not included in the descriptive summary:\n")
+  print(remove)
+  cat("\n")
+
+  invisible(list("desc" = df_desc[, 1:(which(names(df_desc) == "nmiss.total"))],
+                 "miss" = df_desc[, c(1, which(names(df_desc) == "nmiss.total"):ncol(df_desc))]))
 }
