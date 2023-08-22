@@ -25,9 +25,9 @@
 merge_data <- function(data, vars = NULL, newdata = NULL, id_site = NULL, id_year = NULL, ...){
 
   if (is.null(newdata)){
-    print('newdata is unspecified. Merging variables listed in vars onto data.')
+    print(' `newdata` is unspecified. Merging variables listed in `vars` onto data.')
     if (is.null(vars)){
-      stop('Variable names must be specified in vars argument. Use search_var() to search for variables to be included.')
+      stop('Variable names must be specified in `vars` argument. Use `search_var()` to search for variables to be included.')
     }
     if (!is.null(vars)){
       for (i in vars){
