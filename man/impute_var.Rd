@@ -16,7 +16,7 @@ impute_var(
 )
 }
 \arguments{
-\item{data}{A data.frame containing variables to impute.}
+\item{data}{A \code{data.frame} containing variables to impute.}
 
 \item{id_unit}{A unique identifier for sites. A column name in \code{data}.}
 

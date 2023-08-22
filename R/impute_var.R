@@ -5,7 +5,7 @@
 #' The dataset can be either cross-sectional or time-series cross-sectional.
 #' Users may use this function to impute missing values on the site-level variables that they want to diversify prior to subsetting the data to the target population.
 #'
-#' @param data A data.frame containing variables to impute.
+#' @param data A \code{data.frame} containing variables to impute.
 #' @param id_unit A unique identifier for sites. A column name in \code{data}.
 #' @param id_time (Default = \code{NULL}) A unique identifier for time index. A column name in \code{data}. If unspecified, it assumes \code{data} is cross-sectional.
 #' @param var_impute (Default = \code{NULL}) A vector with one or more variable names for which imputation is performed. Imputes all variables that contain missing values in \code{data} except \code{id_unit} and \code{id_time} if not specified.
@@ -22,24 +22,29 @@
 
 impute_var <- function(data, id_unit = NULL, id_time = NULL, var_impute = NULL, var_predictor = NULL, method = 'amelia', n_impute = 5, ...){
 
+  ## ################
+  ## Housekeeping
+  ## ################
+
+  ## data?
+
+  ## id_unit
   if (is.null(id_unit)){
     stop('id_unit must be specified.')
   }
-
-  if (is.null(var_impute)){
-    var_impute <- setdiff(colnames(data)[colSums(is.na(data)) > 0], c(id_unit, id_time))
-    print(paste('No variables selected to impute. Following variables will be imputed: ',
-                paste(var_impute, collapse = ", "), "\n"))
+  if((id_unit %in% colnames(data)) == FALSE){
+    stop(" `id_unit` should be one of colnames(data) ")
   }
 
+  ## id_time
   if (is.null(id_time)){
     print('id_time unspecified. Assumes dataset is cross-sectional.\n')
+  }else{
+    if((id_time %in% colnames(data)) == FALSE){
+      stop(" `id_time` should be one of colnames(data) ")
+    }
   }
-
-  if (is.null(var_predictor)){
-    print('var_predictor unspecified. All variables except for unique identifiers and variables stored in var_impute.\n')
-  }
-
+  ## duplication check
   if (!is.null(id_time) & nrow(data[duplicated(data[,c(id_unit, id_time)]),])>0){
     stop(paste0('Data is not unique by ', id_unit, ' and ', id_time, '.'))
   }
@@ -47,6 +52,32 @@ impute_var <- function(data, id_unit = NULL, id_time = NULL, var_impute = NULL, 
   if (is.null(id_time) & nrow(data[duplicated(data[,id_unit]),])>0){
     stop(paste0('Data is not unique by ', id_unit, '.'))
   }
+
+  ## var_impute
+  if (is.null(var_impute)){
+    var_impute <- setdiff(colnames(data)[colSums(is.na(data)) > 0], c(id_unit, id_time))
+    print(paste('No variables selected to impute. Following variables will be imputed: ',
+                paste(var_impute, collapse = ", "), "\n"))
+  }else{
+    if(all(var_impute %in% colnames(data)) == FALSE){
+      stop(" `var_impute` should be a subset of colnames(data) ")
+    }
+  }
+  ## var_predictor
+  if (is.null(var_predictor)){
+    print('var_predictor unspecified. All variables except for unique identifiers and variables in `var_impute` are used as predictors.\n')
+  }else{
+    if(all(var_predictor %in% colnames(data)) == FALSE){
+      stop(" `var_predictor` should be a subset of colnames(data) ")
+    }
+  }
+
+  ## method
+  if((method %in% c("amelia", 'miceranger')) == FALSE){
+    stop(" `method` should be either`amelia` or `miceranger`.  ")
+  }
+
+  ############
 
   # Converting character and factor variables
   id_binary <- id_refcat <- c()

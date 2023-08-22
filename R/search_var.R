@@ -14,6 +14,7 @@
 #' @export
 
 search_var <- function(keyword = NULL){
+
   vdem <- try(find_var(keyword)[,c('tag', 'name', 'clarification', 'years')])
   names(vdem) <- c('Variable', 'Name', 'Description', 'Coverage')
 
