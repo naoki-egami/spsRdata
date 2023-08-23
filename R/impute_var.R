@@ -10,9 +10,9 @@
 #' @param id_time (Default = \code{NULL}) A unique identifier for time index. A column name in \code{data}. If unspecified, it assumes \code{data} is cross-sectional.
 #' @param var_impute (Default = \code{NULL}) A vector with one or more variable names for which imputation is performed. Imputes all variables that contain missing values in \code{data} except \code{id_unit} and \code{id_time} if not specified.
 #' @param var_predictor (Default = \code{NULL}) A vector with one or more variable names that we use as predictors to impute variables in \code{var_impute}. If \code{NULL}, the function uses all variables in \code{data} except for variables in \code{var_impute}.
-#' @param var_ord (Default = \code{NULL})
-#' @param var_nom (Default = \code{NULL})
-#' @param var_lgstc (Default = \code{NULL})
+#' @param var_ord (Default = \code{NULL}) A vector with one or more variable names to be imputed which are ordinal. Binary variable names can be in either \code{var_ord} or \code{var_nom}.
+#' @param var_nom (Default = \code{NULL}) A vector with one or more variable names to be imputed which are nominal.
+#' @param var_lgstc (Default = \code{NULL}) A vector with one or more variable names to be imputed which are proportional (ranging between 0 and 1).
 #' @param method (Optional. Default = "amelia") Imputation method. Choose from "amelia", "mice", and "miceranger".
 #' @param n_impute (Optional. Default = 5) The number of imputed datasets to create (equivalent of argument \code{m} in \code{amelia()}, \code{mice()}, and \code{miceRanger()}).
 #' @param ... Arguments passed onto \code{Amelia::amelia()}, \code{mice::mice()}, or \code{miceRanger::miceRanger()}.
