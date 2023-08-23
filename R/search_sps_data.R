@@ -15,7 +15,7 @@
 
 search_sps_data <- function(keyword = NULL){
 
-  if (class(keyword) != 'character'){
+  if (!is.character(keyword)){
     stop('Incorrect class for `keyword`.')
   }
 

@@ -17,9 +17,9 @@ Imports:
     dplyr,
     wbstats,
     vdemdata,
-    fuzzyjoin,
     Amelia,
     miceRanger,
+    mice,
     stats,
     devtools
 Remotes: 

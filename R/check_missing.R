@@ -17,7 +17,7 @@
 
 check_missing <- function(data, id_time = NULL){
 
-  if (class(data) != 'data.frame'){
+  if (!is.data.frame(data)){
     stop('`data` must be a data.frame.')
   }
 

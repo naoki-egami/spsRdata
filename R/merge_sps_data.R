@@ -19,7 +19,7 @@
 
 merge_sps_data <- function(data, vars = NULL){
 
-  if (class(data) != 'data.frame'){
+  if (!is.data.frame(data)){
     stop('`data` must be a data.frame.')
   }
   if (is.null(vars)){
