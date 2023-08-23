@@ -15,6 +15,10 @@
 
 search_sps_data <- function(keyword = NULL){
 
+  if (class(keyword) != 'character'){
+    stop('Incorrect class for `keyword`.')
+  }
+
   vdem <- try(find_var(keyword)[,c('tag', 'name', 'clarification', 'years')])
   names(vdem) <- c('Variable', 'Name', 'Description', 'Coverage')
 
