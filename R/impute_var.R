@@ -109,9 +109,6 @@ impute_var <- function(data, id_unit, id_time = NULL, var_impute = NULL, var_pre
     stop('One or more variables in `var_ord` is also in `var_nom`. A variable can only be assigend to one transformation.')
   }
 
-  # var variation
-
-
   ## var_predictor
   if (is.null(var_predictor)){
     cat('`var_predictor` unspecified. All variables except for unique identifiers and variables in `var_impute` are used as predictors.\n')
@@ -147,7 +144,7 @@ impute_var <- function(data, id_unit, id_time = NULL, var_impute = NULL, var_pre
   cat("\n")
   cat("-----------------------------\n")
   cat(paste("Following", length(var_impute), "variables will be imputed using", method, ":\n"))
-  cat(ifelse(length(var_num)>0, paste("Normal:", paste(var_num, collapse = ", "), "\n"), ""))
+  cat(ifelse(length(var_num)>0, paste("Continuous:", paste(var_num, collapse = ", "), "\n"), ""))
   cat(ifelse(length(var_ord)>0, paste("Ordinal:", paste(var_ord, collapse = ", "), "\n"), ""))
   cat(ifelse(length(var_nom)>0, paste("Nominal:", paste(var_nom, collapse = ", "), "\n"), ""))
   cat(ifelse(length(var_lgstc)>0, paste("Proportional:", paste(var_lgstc, collapse = ", "), "\n"), ""))
@@ -163,6 +160,7 @@ impute_var <- function(data, id_unit, id_time = NULL, var_impute = NULL, var_pre
 
   ids <- setdiff(names(data_x[, sapply(data_x, class) == 'character']), c(id_unit, var_impute))
   ids <- c(ids, setdiff(names(data_x[vapply(data_x, function(x) length(unique(x)) == 1, logical(1L))]), c(id_unit, var_impute)))
+  if (length(ids)==0) ids <- NULL
 
   # Amelia
   if (method == 'amelia'){
