@@ -89,9 +89,11 @@ check_missing <- function(data, id_time = NULL){
   print(df_desc[, c(1, which(names(df_desc) == "nmiss.total"):ncol(df_desc))])
   cat("\n\n")
 
-  cat("Following character variable(s) has too many unique values and was not included in the descriptive summary:\n")
-  print(remove)
-  cat("\n")
+  if (length(remove)>0){
+    cat("Following character variable(s) has too many unique values and was not included in the descriptive summary:\n")
+    print(remove)
+    cat("\n")
+  }
 
   invisible(list("desc" = df_desc[, 1:(which(names(df_desc) == "nmiss.total"))],
                  "miss" = df_desc[, c(1, which(names(df_desc) == "nmiss.total"):ncol(df_desc))]))
