@@ -24,7 +24,7 @@
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 
-var_impute <- function(data, id_unit, id_time = NULL, var_impute = NULL, var_predictor = NULL, var_ord = NULL, var_nom = NULL, var_lgstc = NULL,
+impute_var <- function(data, id_unit, id_time = NULL, var_impute = NULL, var_predictor = NULL, var_ord = NULL, var_nom = NULL, var_lgstc = NULL,
                        method = 'amelia', n_impute = 5, ...){
 
   ## ################

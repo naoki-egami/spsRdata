@@ -1,11 +1,9 @@
 #' Merge new variables from V-Dem/World Bank or external dataset
 #'
 #' Allows users to either add new variable(s) from V-Dem or World Bank or merge their own data set to the baseline data set.
-#' To add variables from V-Dem or World Bank, \code{data}, \code{newdata} and \code{vars} must be supplied.
-#' To merge external data set, \code{data}, \code{newdata}, and \code{id_site} must be supplied.
 #'
 #' @param data data.frame for new variables to be merged onto.
-#' @param vars (Default = \code{NULL}) A vector with one or more variable names that should be merged onto \code{data}. Must be specified if \code{newdata} is \code{NULL}. Use \code{search_var()} to search for new variables.
+#' @param vars (Default = \code{NULL}) A vector with one or more variable names that should be merged onto \code{data}. Use \code{search_var()} to search for new variables.
 #' @import vdemdata
 #' @import wbstats
 #' @import devtools
