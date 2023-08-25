@@ -62,7 +62,7 @@ impute_var <- function(data, id_unit, id_time = NULL, var_impute = NULL, var_pre
 
   ## var_impute
   if (is.null(var_impute)){
-    cat('No variables selected to impute. All variables with missing values will be imputed.\n')
+    warning('No variables selected to impute. All variables with missing values will be imputed.\n')
   }else{
     if (all(var_impute %in% colnames(data)) == FALSE){
       stop("`var_impute` should be a subset of `colnames(data)`.")
@@ -74,12 +74,22 @@ impute_var <- function(data, id_unit, id_time = NULL, var_impute = NULL, var_pre
     if (!(var_ord %in% colnames(data))){
       stop("`var_ord` does not exist in `data`.")
     }
+    if (!is.null(var_impute)){
+      if (all(var_ord %in% var_impute) == FALSE){
+        warning('One or more variables in `var_ord` is not included in `var_impute`. Assuming all variables are to be imputed.\n')
+      }
+    }
   }
 
   ## var_nom
   if (!is.null(var_nom)){
     if (!(var_nom %in% colnames(data))){
       stop("`var_nom` does not exist in `data`.")
+    }
+    if (!is.null(var_impute)){
+      if (all(var_nom %in% var_impute) == FALSE){
+        warning('One or more variables in `var_nom` is not included in `var_impute`. Assuming all variables are to be imputed.\n')
+      }
     }
   }
 
@@ -94,6 +104,11 @@ impute_var <- function(data, id_unit, id_time = NULL, var_impute = NULL, var_pre
       }
       if (min(data[[i]], na.rm = T) < 0 | max(data[[i]], na.rm = T) > 1){
         stop(paste0("`var_lgstc` variable ", i, "must be between 0 and 1."))
+      }
+    }
+    if (!is.null(var_impute)){
+      if (all(var_lgstc %in% var_impute) == FALSE){
+        warning('One or more variables in `var_lgstc` is not included in `var_impute`. Assuming all variables are to be imputed.\n')
       }
     }
   }
@@ -111,7 +126,7 @@ impute_var <- function(data, id_unit, id_time = NULL, var_impute = NULL, var_pre
 
   ## var_predictor
   if (is.null(var_predictor)){
-    cat('`var_predictor` unspecified. All variables except for unique identifiers and variables in `var_impute` are used as predictors.\n')
+    warning('`var_predictor` unspecified. All variables except for unique identifiers and variables in `var_impute` are used as predictors.\n')
   }else{
     if(all(var_predictor %in% colnames(data)) == FALSE){
       stop(" `var_predictor` should be a subset of `colnames(data)`. ")
@@ -221,36 +236,37 @@ impute_var <- function(data, id_unit, id_time = NULL, var_impute = NULL, var_pre
     }
 
     mice_method <- rep("", length(var_impute))
-    mice_method[which(var_impute %in% var_num)]   <- "rf"
-    mice_method[which(var_impute %in% var_lgstc)] <- "rf"
+    mice_method[which(var_impute %in% var_num)]   <- "2lonly.mean"
+    mice_method[which(var_impute %in% var_lgstc)] <- "2lonly.mean"
     mice_method[which(var_impute %in% var_bin)] <- "logreg"
     mice_method[which(var_impute %in% var_ord)] <- "polr"
     mice_method[which(var_impute %in% var_nom)] <- "polyreg"
 
     pred <- quickpred(data_x,
-                      mincor = 0.2,
+                      mincor = 0.1,
                       exclude = c(id_time, id_unit, ids))
+    pred[,id_unit] <- -2
+    if (!is.null(id_time)){
+      pred[,id_time] <- 2
+      data_x[[id_time]] <- as.integer(data_x[[id_time]])
+    }
+
+    data_x[[id_unit]] <- as.integer(as.factor(data_x[[id_unit]]))
+    imputed <- mice(data = data_x, m = n_impute, predictorMatrix = pred[var_impute,], method = mice_method, blocks = var_impute)
+    imputed <- lapply(1:n_impute, function(x) complete(imputed, x))
 
     merged  <- data
-    for (v in 1:length(var_impute)){
-      imputed <- mice(data = data_x,
-                      m    = n_impute,
-                      predictorMatrix = t(as.matrix(pred[var_impute[v],])),
-                      method = mice_method[v],
-                      blocks = var_impute[v],
-                      ridge = 0.00001,
-                      threshold = 1.1)
-      imputed <- lapply(1:n_impute, function(x) complete(imputed, x))
-      if (var_impute[v] %in% c(var_ord, var_nom)){
-        combined_df <- do.call(cbind, lapply(imputed, function(x) as.character(x[[var_impute[v]]])))
-        merged[[var_impute[v]]] <- apply(combined_df, 1, function(x) sample(x, 1))
-        if (var_impute[v] %in% var_ord){
-          merged[[var_impute[v]]] <- as.numeric(merged[[var_impute[v]]])
+    for (v in var_impute){
+      if (v %in% c(var_ord, var_nom)){
+        combined_df <- do.call(cbind, lapply(imputed, function(x) as.character(x[[v]])))
+        merged[[v]] <- apply(combined_df, 1, function(x) sample(x, 1))
+        if (v %in% var_ord){
+          merged[[v]] <- as.numeric(merged[[v]])
         }
       }else{
-        combined_df <- do.call(cbind, lapply(imputed, function(x) x[[var_impute[v]]]))
-        merged[[var_impute[v]]] <- rowMeans(combined_df, na.rm = T)
-        merged[[var_impute[v]]] <- ifelse(is.nan(merged[[var_impute[v]]]), NA, merged[[var_impute[v]]])
+        combined_df <- do.call(cbind, lapply(imputed, function(x) x[[v]]))
+        merged[[v]] <- rowMeans(combined_df, na.rm = T)
+        merged[[v]] <- ifelse(is.nan(merged[[v]]), NA, merged[[v]])
       }
     }
   }
