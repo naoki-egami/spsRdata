@@ -53,7 +53,7 @@ impute_var <- function(data, id_unit = NULL, id_time = NULL, var_impute = NULL, 
 
   ## id_time
   if (is.null(id_time)){
-    print('`id_time` unspecified. Assumes dataset is cross-sectional.\n')
+    cat('`id_time` unspecified. Assumes dataset is cross-sectional.\n')
   }else{
     if((id_time %in% colnames(data)) == FALSE){
       stop(" `id_time` should be one of colnames(data) ")
