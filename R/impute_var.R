@@ -24,7 +24,7 @@
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 
-impute_var <- function(data, id_unit, id_time = NULL, var_impute = NULL, var_predictor = NULL, var_ord = NULL, var_nom = NULL, var_lgstc = NULL,
+impute_var <- function(data, id_unit = NULL, id_time = NULL, var_impute = NULL, var_predictor = NULL, var_ord = NULL, var_nom = NULL, var_lgstc = NULL,
                        method = 'amelia', n_impute = 5, ...){
 
   ## ################
@@ -37,8 +37,15 @@ impute_var <- function(data, id_unit, id_time = NULL, var_impute = NULL, var_pre
   }
 
   ## id_unit
-  if (is.null(id_unit)){
+  id_unit_internal <- FALSE
+  if (is.null(id_unit) == TRUE & is.null(id_time) == FALSE){
     stop('`id_unit` must be specified.')
+  }else if(is.null(id_unit) == TRUE & is.null(id_time) == TRUE){
+    id_unit <- seq(1:nrow(data))
+    data <- cbind(data, id_unit)
+    colnames(data)[ncol(data)] <- "id_unit"
+    id_unit <- "id_unit"
+    id_unit_internal <- TRUE
   }
   if ((id_unit %in% colnames(data)) == FALSE){
     stop(" `id_unit` should be one of colnames(data) ")
@@ -269,6 +276,10 @@ impute_var <- function(data, id_unit, id_time = NULL, var_impute = NULL, var_pre
         merged[[v]] <- ifelse(is.nan(merged[[v]]), NA, merged[[v]])
       }
     }
+  }
+
+  if(id_unit_internal == TRUE){
+    merged[, "id_unit"] <- NULL
   }
 
   return(merged)
