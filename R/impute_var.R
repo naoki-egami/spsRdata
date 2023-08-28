@@ -78,7 +78,7 @@ impute_var <- function(data, id_unit = NULL, id_time = NULL, var_impute = NULL, 
 
   ## var_ords
   if (!is.null(var_ord)){
-    if (!(var_ord %in% colnames(data))){
+    if (all(var_ord %in% colnames(data)) == FALSE){
       stop("`var_ord` does not exist in `data`.")
     }
     if (!is.null(var_impute)){
@@ -90,7 +90,7 @@ impute_var <- function(data, id_unit = NULL, id_time = NULL, var_impute = NULL, 
 
   ## var_nom
   if (!is.null(var_nom)){
-    if (!(var_nom %in% colnames(data))){
+    if (all(var_nom %in% colnames(data)) == FALSE){
       stop("`var_nom` does not exist in `data`.")
     }
     if (!is.null(var_impute)){
@@ -102,7 +102,7 @@ impute_var <- function(data, id_unit = NULL, id_time = NULL, var_impute = NULL, 
 
   ## var_lgstc
   if (!is.null(var_lgstc)){
-    if (!(var_lgstc %in% colnames(data))){
+    if (all(var_lgstc %in% colnames(data)) == FALSE){
       stop("`var_lgstc` does not exist in `data`.")
     }
     for (i in var_lgstc){
