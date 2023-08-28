@@ -6,7 +6,7 @@
 \usage{
 impute_var(
   data,
-  id_unit,
+  id_unit = NULL,
   id_time = NULL,
   var_impute = NULL,
   var_predictor = NULL,

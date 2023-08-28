@@ -180,7 +180,7 @@ impute_var <- function(data, id_unit = NULL, id_time = NULL, var_impute = NULL, 
   }
 
 
-  ids <- setdiff(names(data_x[, sapply(data_x, class) == 'character']), c(id_unit, var_impute))
+  ids <- setdiff(names(data_x)[sapply(data_x, is.character)], c(id_unit, var_impute))
   ids <- c(ids, setdiff(names(data_x[vapply(data_x, function(x) length(unique(x)) == 1, logical(1L))]), c(id_unit, var_impute)))
   if (length(ids)==0) ids <- NULL
 
