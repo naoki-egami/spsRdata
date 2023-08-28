@@ -52,7 +52,7 @@ merge_sps_data <- function(data, vars = NULL){
   }
   if (length(dne)>0){
     cat('\n')
-    cat('Following variables weren not found in either World Bank or V-Dem data set:\n')
+    cat('Following variables were not found in either World Bank or V-Dem data set:\n')
     cat(dne)
     cat('\n')
     cat('Check for typos or use `search_var()` to search for variables.\n')
